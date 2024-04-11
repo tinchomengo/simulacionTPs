@@ -1,0 +1,2 @@
+Página web de donde se obtuvieron los datos: https://sports-statistics.com/sports-data/sports-data-sets-for-data-modeling-visualization-predictions-machine-learning/
+Específicamente: Soccer Data Sets > UEFA Champions League Dataset
