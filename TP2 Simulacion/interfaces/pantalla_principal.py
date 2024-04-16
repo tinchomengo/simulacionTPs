@@ -3,9 +3,9 @@ import tkinter as tk
 from tkinter import ttk
 import numpy as np
 import sys
-sys.path.append('c:/Users/isaur/Downloads/tp2sim/simulacionTPs/TP2 Simulacion')
+sys.path.append('D:/Users/Usuario/Desktop/TP 2/simulacionTPs/TP2 Simulacion')
 import exponencial
-
+from Graficos.exponencial import grafico_exponencial
 
 def generar_tabla(tabla):
     tabla.heading("Indice", text="Indice")
@@ -41,6 +41,14 @@ def mostrar_tabla_exponencial(frecuencia, lambda_valor):
     distr, num, ji_cuadrado = exponencial.exponencial(numeros, int(frecuencia), float(lambda_valor), True)
     actualiza_tabla(tabla_exponencial, num)
     actualizar_tabla_ji_cuadrado(tabla_ji_cuadrado, distr)
+    btn_generar_exponencial = tk.Button(frame_exponencial, text="Generar Grafico", 
+                                    command=lambda: grafico_exponencial(
+                                        num,
+                                        distr,
+                                        int(cmb_frecuencia_exponencial.get())
+                                    ),
+                                    cursor="hand2")
+    btn_generar_exponencial.grid(row=2, column=1, columnspa=4, padx=5, pady=5)
 
 def actualizar_tabla_ji_cuadrado(tabla, datos):
     # Borra todos los elementos actuales de la tabla
