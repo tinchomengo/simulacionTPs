@@ -2,6 +2,9 @@ import random
 import tkinter as tk
 from tkinter import ttk
 import numpy as np
+import sys
+sys.path.append('c:/Users/isaur/Downloads/tp2sim/simulacionTPs/TP2 Simulacion')
+import exponencial
 
 
 def generar_tabla(tabla):
@@ -11,6 +14,15 @@ def generar_tabla(tabla):
     tabla.column("Indice", width=150, anchor="center")
     tabla.column("Numero", width=150, anchor="center")
 
+
+def generar_tabla_ji_cuadrado(tabla):
+    tabla.heading("#1", text="Intervalo")
+    tabla.heading("#2", text="Frecuencia Observada")
+    tabla.heading("#3", text="Frecuencia Esperada")
+
+    tabla.column("#1", width=60, anchor="center")  # Ajustamos el ancho de la columna para que quepa el texto "Intervalo"
+    tabla.column("#2", width=130, anchor="center")  # Ancho igual para las otras dos columnas
+    tabla.column("#3", width=130, anchor="center")
 
 def mostrar_tabla_uniforme():
     numeros = generar_numeros_aleatorios(txt_muestra_uniforme)
@@ -24,17 +36,33 @@ def mostra_tabla_normal():
     actualiza_tabla(tabla_normal_2, numeros_2)
 
 
-def mostrar_tabla_exponencial():
+def mostrar_tabla_exponencial(frecuencia, lambda_valor):
     numeros = generar_numeros_aleatorios(txt_muestra_exponencial)
-    actualiza_tabla(tabla_exponencial, numeros)
+    distr, num, ji_cuadrado = exponencial.exponencial(numeros, int(frecuencia), float(lambda_valor), True)
+    actualiza_tabla(tabla_exponencial, num)
+    actualizar_tabla_ji_cuadrado(tabla_ji_cuadrado, distr)
 
+def actualizar_tabla_ji_cuadrado(tabla, datos):
+    # Borra todos los elementos actuales de la tabla
+    tabla.delete(*tabla.get_children())
+
+    # Asegúrate de que las listas tengan la misma longitud
+    if len(datos[0]) != len(datos[1]) or len(datos[1]) != len(datos[2]):
+        raise ValueError("Las listas de datos deben tener la misma longitud")
+
+    # Inserta los nuevos datos en la tabla
+    for i in range(len(datos[0])):
+        intervalo = datos[0][i]
+        fo = datos[1][i]
+        fe = datos[2][i]
+        tabla.insert("", "end", values=(intervalo, fo, fe))
 
 def generar_numeros_aleatorios(txt):
     numeros = []
     if validar_muestra(txt.get()):
         tamano = int(txt.get())
-        numeros = np.random.uniform(0, 1, tamano).round(4)
-    return numeros
+        numeros = np.random.uniform(0.0001, 1, tamano)    
+        return numeros
 
 
 def actualiza_tabla(tabla, numeros):
@@ -213,17 +241,31 @@ lbl_lambda.grid(row=1, column=1, padx=5, pady=5)
 txt_lambda = tk.Entry(frame_exponencial)
 txt_lambda.grid(row=1, column=2, padx=5, pady=5)
 
-btn_generar_exponencial = tk.Button(frame_exponencial, text="Generar", command=mostrar_tabla_exponencial,
+btn_generar_exponencial = tk.Button(frame_exponencial, text="Generar", 
+                                    command=lambda: mostrar_tabla_exponencial(
+                                        cmb_frecuencia_exponencial.get(),
+                                        txt_lambda.get()
+                                    ),
                                     cursor="hand2")
 btn_generar_exponencial.grid(row=2, column=1, columnspa=2, padx=5, pady=5)
 
 tabla_exponencial = ttk.Treeview(frame_exponencial, columns=("Indice", "Numero"), show="headings")
-tabla_exponencial.grid(row=3, column=0, columnspan=4, padx=5, pady=5)
+tabla_exponencial.grid(row=3, column=0, columnspan=2, padx=5, pady=5)  # First table
 
 scrollbar_exponencial = ttk.Scrollbar(frame_exponencial, orient="vertical", command=tabla_exponencial.yview)
-scrollbar_exponencial.grid(row=3, column=4, sticky="ns")
+scrollbar_exponencial.grid(row=3, column=4, sticky="ns")  # First table scrollbar
 tabla_exponencial.configure(yscrollcommand=scrollbar_exponencial.set)
 
 generar_tabla(tabla_exponencial)
+
+tabla_ji_cuadrado = ttk.Treeview(frame_exponencial, columns=("Intervalo", "Frecuencia Observada", "Frecuencia Esperada"), show="headings")
+
+tabla_ji_cuadrado.grid(row=3, column=2, columnspan=2, padx=1, pady=5)  # Second table
+
+scrollbar_ji_cuadrado = ttk.Scrollbar(frame_exponencial, orient="vertical", command=tabla_ji_cuadrado.yview)
+scrollbar_ji_cuadrado.grid(row=3, column=6, sticky="ns")  # Second table scrollbar
+tabla_ji_cuadrado.configure(yscrollcommand=scrollbar_ji_cuadrado.set)
+
+generar_tabla_ji_cuadrado(tabla_ji_cuadrado)
 
 root.mainloop()
