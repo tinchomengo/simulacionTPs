@@ -3,15 +3,17 @@ import tkinter as tk
 from tkinter import ttk
 import numpy as np
 import sys
-sys.path.append('D:/Users/Usuario/Desktop/TP 2/simulacionTPs/TP2 Simulacion')
+sys.path.append('C:/Users/matpo/Desktop/TP_2/simulacionTPs/TP2 Simulacion')
 import exponencial
+import normal
+import uniforme
 from Graficos.exponencial import grafico_exponencial
 
 def generar_tabla(tabla):
     tabla.heading("Indice", text="Indice")
     tabla.heading("Numero", text="Numero")
 
-    tabla.column("Indice", width=150, anchor="center")
+    tabla.column("Indice", width=60, anchor="center")
     tabla.column("Numero", width=150, anchor="center")
 
 
@@ -24,16 +26,21 @@ def generar_tabla_ji_cuadrado(tabla):
     tabla.column("#2", width=130, anchor="center")  # Ancho igual para las otras dos columnas
     tabla.column("#3", width=130, anchor="center")
 
-def mostrar_tabla_uniforme():
-    numeros = generar_numeros_aleatorios(txt_muestra_uniforme)
-    actualiza_tabla(tabla_uniforme, numeros)
+def mostrar_tabla_uniforme(frecuencia, a, b):
+    numeros = generar_numeros_aleatorios(txt_muestra_uniforme) 
+    distribucionJiCuad,num,ji_calc = uniforme.uniforme(numeros, int(frecuencia), int(a), int(b))    
+    actualiza_tabla(tabla_uniforme, num)
+    actualizar_tabla_ji_cuadrado_uniforme(tabla_ji_cuadrado_uniforme, distribucionJiCuad)
 
 
-def mostra_tabla_normal():
-    numeros_1 = generar_numeros_aleatorios(txt_muestra_normal)
-    numeros_2 = generar_numeros_aleatorios(txt_muestra_normal)
-    actualiza_tabla(tabla_normal_1, numeros_1)
-    actualiza_tabla(tabla_normal_2, numeros_2)
+
+def mostra_tabla_normal(frecuencia,media,desviacion):
+    numeros = generar_numeros_aleatorios(txt_muestra_normal)
+
+    distribucion,num,ji_calculado=normal.normal(numeros,int(frecuencia), int(media), int(desviacion),True)
+    actualiza_tabla(tabla_normal_1, num)
+
+    actualizar_tabla_ji_cuadrado_normal(tabla_ji_cuadrado_normal,distribucion)
 
 
 def mostrar_tabla_exponencial(frecuencia, lambda_valor):
@@ -50,7 +57,39 @@ def mostrar_tabla_exponencial(frecuencia, lambda_valor):
                                     cursor="hand2")
     btn_generar_exponencial.grid(row=2, column=1, columnspa=4, padx=5, pady=5)
 
+
+
 def actualizar_tabla_ji_cuadrado(tabla, datos):
+    # Borra todos los elementos actuales de la tabla
+    tabla.delete(*tabla.get_children())
+
+    # Asegúrate de que las listas tengan la misma longitud
+    if len(datos[0]) != len(datos[1]) or len(datos[1]) != len(datos[2]):
+        raise ValueError("Las listas de datos deben tener la misma longitud")
+
+    # Inserta los nuevos datos en la tabla
+    for i in range(len(datos[0])):
+        intervalo = datos[0][i]
+        fo = datos[1][i]
+        fe = datos[2][i]
+        tabla.insert("", "end", values=(intervalo, fo, fe))
+
+def actualizar_tabla_ji_cuadrado_uniforme(tabla, datos):
+    # Borra todos los elementos actuales de la tabla
+    tabla.delete(*tabla.get_children())
+
+    # Asegúrate de que las listas tengan la misma longitud
+    if len(datos[0]) != len(datos[1]) or len(datos[1]) != len(datos[2]):
+        raise ValueError("Las listas de datos deben tener la misma longitud")
+
+    # Inserta los nuevos datos en la tabla
+    for i in range(len(datos[0])):
+        intervalo = datos[0][i]
+        fo = datos[1][i]
+        fe = datos[2][i]
+        tabla.insert("", "end", values=(intervalo, fo, fe))
+
+def actualizar_tabla_ji_cuadrado_normal(tabla, datos):
     # Borra todos los elementos actuales de la tabla
     tabla.delete(*tabla.get_children())
 
@@ -162,17 +201,32 @@ lbl_b.grid(row=1, column=2, padx=5, pady=5)
 txt_b = tk.Entry(frame_uniforme)
 txt_b.grid(row=1, column=3, padx=5, pady=5)
 
-btn_generar_uniforme = tk.Button(frame_uniforme, text="Generar", command=mostrar_tabla_uniforme, cursor="hand2")
+btn_generar_uniforme = tk.Button(frame_uniforme, text="Generar", 
+                                 command=lambda: mostrar_tabla_uniforme(
+                                     cmb_frecuencia_uniforme.get(),
+                                     txt_a.get(),
+                                     txt_b.get()
+                                 ),
+                                 cursor="hand2")
 btn_generar_uniforme.grid(row=2, column=1, columnspa=2, padx=5, pady=5)
 
 tabla_uniforme = ttk.Treeview(frame_uniforme, columns=("Indice", "Numero"), show="headings")
-tabla_uniforme.grid(row=3, column=0, columnspan=4, padx=5, pady=5)
+tabla_uniforme.grid(row=3, column=0, columnspan=2, padx=5, pady=5)
 
 scrollbar_uniforme = ttk.Scrollbar(frame_uniforme, orient="vertical", command=tabla_uniforme.yview)
 scrollbar_uniforme.grid(row=3, column=4, sticky="ns")
 tabla_uniforme.configure(yscrollcommand=scrollbar_uniforme.set)
 
 generar_tabla(tabla_uniforme)
+
+tabla_ji_cuadrado_uniforme = ttk.Treeview(frame_uniforme, columns=("Intervalo", "Frecuencia Observada", "Frecuencia Esperada"), show="headings")
+
+tabla_ji_cuadrado_uniforme.grid(row=3, column=2, columnspan=2, padx=1, pady=5)  # Second table
+
+scrollbar_ji_cuadrado = ttk.Scrollbar(frame_uniforme, orient="vertical", command=tabla_ji_cuadrado_uniforme.yview)
+scrollbar_ji_cuadrado.grid(row=3, column=6, sticky="ns")  # Second table scrollbar
+tabla_ji_cuadrado_uniforme.configure(yscrollcommand=scrollbar_ji_cuadrado.set)
+generar_tabla_ji_cuadrado(tabla_ji_cuadrado_uniforme)
 
 #NORMAL
 btn_normal = tk.Button(frame_botones, text="Normal", command=mostrar_normal, cursor="hand2")
@@ -204,7 +258,13 @@ lbl_desviacion.grid(row=1, column=2, padx=5, pady=5)
 txt_desviacion = tk.Entry(frame_normal)
 txt_desviacion.grid(row=1, column=3, padx=5, pady=5)
 
-btn_generar_normal = tk.Button(frame_normal, text="Generar", command=mostra_tabla_normal, cursor="hand2")
+btn_generar_normal =tk.Button(frame_normal, text="Generar", 
+                                    command=lambda: mostra_tabla_normal(
+                                        cmb_frecuencia_normal.get(),
+                                        txt_media.get(),
+                                        txt_desviacion.get()
+                                    ),
+                                    cursor="hand2")
 btn_generar_normal.grid(row=2, column=1, columnspa=2, padx=5, pady=5)
 
 scrollbar_normal = ttk.Scrollbar(frame_normal, orient="vertical")
@@ -224,6 +284,16 @@ scrollbar_normal.config(command=lambda *args: (tabla_normal_1.yview(*args), tabl
 scrollbar_normal.grid(row=3, column=4, sticky="ns")
 
 generar_tabla(tabla_normal_2)
+
+tabla_ji_cuadrado_normal = ttk.Treeview(frame_normal, columns=("Intervalo", "Frecuencia Observada", "Frecuencia Esperada"), show="headings")
+
+tabla_ji_cuadrado_normal.grid(row=3, column=2, columnspan=2, padx=1, pady=5)  # Second table
+
+scrollbar_ji_normal = ttk.Scrollbar(frame_normal, orient="vertical", command=tabla_ji_cuadrado_normal.yview)
+scrollbar_ji_cuadrado.grid(row=3, column=6, sticky="ns")  # Second table scrollbar
+tabla_ji_cuadrado_normal.configure(yscrollcommand=scrollbar_ji_cuadrado.set)
+generar_tabla_ji_cuadrado(tabla_ji_cuadrado_normal)
+
 
 #EXPONENCIAL
 btn_exponencial = tk.Button(frame_botones, text="Exponencial", command=mostrar_exponencial, cursor="hand2")
