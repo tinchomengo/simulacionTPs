@@ -3,11 +3,13 @@ import tkinter as tk
 from tkinter import ttk
 import numpy as np
 import sys
-sys.path.append('C:/Users/matpo/Desktop/TP_2/simulacionTPs/TP2 Simulacion')
+sys.path.append('D:/Users/Usuario/Desktop/Simulacion TP/simulacionTPs/TP2 Simulacion')
 import exponencial
 import normal
 import uniforme
-from Graficos.exponencial import grafico_exponencial
+from Graficos.exponencial import histograma_exponencial
+from Graficos.uniforme import histograma_uniforme
+from Graficos.normal import histograma_normal
 
 def generar_tabla(tabla):
     tabla.heading("Indice", text="Indice")
@@ -31,6 +33,15 @@ def mostrar_tabla_uniforme(frecuencia, a, b):
     distribucionJiCuad,num,ji_calc = uniforme.uniforme(numeros, int(frecuencia), int(a), int(b))    
     actualiza_tabla(tabla_uniforme, num)
     actualizar_tabla_ji_cuadrado_uniforme(tabla_ji_cuadrado_uniforme, distribucionJiCuad)
+    btn_generar_uniforme = tk.Button(frame_uniforme, text="Generar Grafico", 
+                                    command=lambda: histograma_uniforme(
+                                        num,
+                                        distribucionJiCuad,
+                                        int(frecuencia)
+                                    ),
+                                    cursor="hand2")
+    btn_generar_uniforme.grid(row=2, column=1, columnspa=4, padx=5, pady=5)
+
 
 
 
@@ -42,6 +53,15 @@ def mostra_tabla_normal(frecuencia,media,desviacion):
 
     actualizar_tabla_ji_cuadrado_normal(tabla_ji_cuadrado_normal,distribucion)
 
+    btn_generar_normal = tk.Button(frame_normal, text="Generar Grafico", 
+                                    command=lambda: histograma_uniforme(
+                                        num,
+                                        distribucion,
+                                        int(frecuencia)
+                                    ),
+                                    cursor="hand2")
+    btn_generar_normal.grid(row=2, column=1, columnspa=4, padx=5, pady=5)
+
 
 def mostrar_tabla_exponencial(frecuencia, lambda_valor):
     numeros = generar_numeros_aleatorios(txt_muestra_exponencial)
@@ -49,7 +69,7 @@ def mostrar_tabla_exponencial(frecuencia, lambda_valor):
     actualiza_tabla(tabla_exponencial, num)
     actualizar_tabla_ji_cuadrado(tabla_ji_cuadrado, distr)
     btn_generar_exponencial = tk.Button(frame_exponencial, text="Generar Grafico", 
-                                    command=lambda: grafico_exponencial(
+                                    command=lambda: histograma_exponencial(
                                         num,
                                         distr,
                                         int(cmb_frecuencia_exponencial.get())

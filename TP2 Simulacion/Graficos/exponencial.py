@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-def grafico_exponencial(data, dist, cant_intervalos):
+def histograma_exponencial(data, dist, cant_intervalos):
     # Graficar histograma
     plt.figure(figsize=(7,4))
     plt.hist(data, bins=cant_intervalos, edgecolor='black')

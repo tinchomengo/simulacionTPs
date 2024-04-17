@@ -1,44 +1,18 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
-data = [
-    15.8369, 15.0709, 15.6216, 18.8318, 17.3947, 18.7584, 15.1325, 16.6484, 15.8483, 11.9724,
-    17.2182, 10.3121, 12.0339, 14.8717, 14.7173, 13.0819, 10.7798, 15.0368, 18.3297, 14.2130,
-    12.8525, 18.0794, 18.5332, 14.2695, 11.5054, 15.7754, 13.7238, 18.2418, 17.9597, 13.3731,
-    15.0652, 19.8469, 17.2011, 12.3037, 17.1197, 18.5637, 10.3454, 11.0902, 12.6920, 16.4757,
-    19.7982, 10.4590, 10.6986, 15.3530, 10.0479, 12.3708, 14.8729, 13.6734, 12.6375, 19.6613,
-    13.9884, 11.1536, 14.8669, 13.6930, 16.8170, 13.2660, 16.3754, 16.1510, 16.0260, 16.2434,
-    17.4792, 11.5853, 11.4842, 17.2061, 14.1679, 11.6782, 12.5521, 11.4734, 17.3684, 13.9884,
-    15.7215, 17.8498, 15.6744, 12.5577, 14.5809, 15.4765, 10.3307, 11.5431, 15.2264, 19.3818,
-    10.6806, 15.7814, 18.0777, 17.2366, 16.6603, 10.5431, 15.1078, 15.9459, 16.2282, 11.7066,
-    12.2579, 16.6777, 12.8505, 11.2512, 12.8834, 19.7491, 17.7361, 17.1381, 16.0652, 11.8982,
-    19.4820, 15.7010, 11.1396, 16.0423, 13.8457, 18.8656, 19.6683, 15.2410, 15.3704, 17.8347,
-    10.7525, 14.1559, 11.4397, 17.8710, 15.2286, 19.0110, 14.4714, 17.7462, 14.9553, 15.6118,
-    11.2390, 19.1929, 16.0696, 17.4474, 10.9001, 17.8253, 13.2063, 12.4579, 10.5917, 19.6799,
-    13.9088, 11.3320, 12.7696, 13.1184, 17.7428, 17.6132, 17.6918, 18.2374, 12.7245, 11.9304,
-    13.7596, 18.3079, 17.6335, 13.3907, 18.5444, 13.2854, 10.8402, 11.8188, 14.0762, 15.1517,
-    14.9919, 10.7980, 15.2309
-]
+def histograma_uniforme(data, dist, cant_intervalos):
+    # Plot histogram
+    plt.figure(figsize=(7,4))
+    plt.hist(data, bins=cant_intervalos, edgecolor='black')
+    plt.title('Histograma Distribucion Uniforme')
+    plt.ylabel('Frecuencia Observadas')
+    plt.xlabel('Intervalos')
 
-intervalos = 13
+    # Show interval limits and frequencies
+    for i in range(len(dist[0])):
+        lower, upper = dist[0][i]
+        freq = dist[1][i]
+        plt.text((lower + upper) / 2, freq, f"{lower:.4f}\n{upper:.4f}\n({freq})", ha='center', va='bottom')
 
-# Calcula los límites de cada intervalo
-li_ls = [
-    (10.0479, 10.8017), (10.8017, 11.5555), (11.5555, 12.3092), (12.3092, 13.0630),
-    (13.0630, 13.8168), (13.8168, 14.5705), (14.5705, 15.3243), (15.3243, 16.0781),
-    (16.0781, 16.8319), (16.8319, 17.5856), (17.5856, 18.3394), (18.3394, 19.0932),
-    (19.0932, 19.8469)
-]
-
-# Histograma
-plt.figure(figsize=(14, 8))
-frecuencias, bins, _ = plt.hist(data, intervalos, edgecolor='black', density=False)
-plt.title('Histograma Distribucion Uniforme')
-plt.ylabel('Frecuencia')
-plt.xlabel('Valores')
-
-# Mostrar frecuencias en cada intervalo
-for i in range(len(bins) - 1):
-    plt.text(bins[i] + (bins[i+1]-bins[i])/2, frecuencias[i], str(int(frecuencias[i])), ha='center', va='bottom',fontsize=8)
-    plt.text(bins[i] + (bins[i+1]-bins[i])/2, 0, f'LI: {li_ls[i][0]:.4f}"\n LS: {li_ls[i][1]:.4f}', ha='center', va='top', color='black', rotation=90,fontsize=6)
-
-plt.show()
+    plt.show()
