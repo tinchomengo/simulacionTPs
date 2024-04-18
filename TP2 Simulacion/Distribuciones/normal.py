@@ -3,7 +3,7 @@ import copy
 from scipy.stats import norm
 
 
-def normal(muestra,cantidad_intervalos ,media,desviacion, tipo_return):
+def normal(muestra,cantidad_intervalos ,media,desviacion):
     dist_normal = [0]*len(muestra)
     randoms = [0]*len(muestra)
     dist_normal,randoms = generador_numeros_normales(len(muestra),media,desviacion )
@@ -54,10 +54,7 @@ def normal(muestra,cantidad_intervalos ,media,desviacion, tipo_return):
 
 
     ji_calc=calcular_ji_cuadrado(matriz_ji_cuadrado)
-    if tipo_return:
-        return matriz_ji_cuadrado, dist_normal, ji_calc
-    else:
-        return matriz_intervalos_frecuencias
+    return matriz_ji_cuadrado, dist_normal, ji_calc
 
 
 def calcular_ji_cuadrado(matriz):

@@ -3,7 +3,7 @@ import numpy as np
 import copy
 
 
-def exponencial(muestra, cantidad_intervalos, lambda_dato, tipo_return):
+def exponencial(muestra, cantidad_intervalos, lambda_dato):
     distExponencial = [0]*len(muestra)
     for i in range(len(distExponencial)):
         distExponencial[i] = generador_exponenciales(lambda_dato, muestra[i])
@@ -49,12 +49,8 @@ def exponencial(muestra, cantidad_intervalos, lambda_dato, tipo_return):
         matriz_ji_cuadrado[2][i] = round(((frec_esperada_intervalo(matriz_ji_cuadrado[0][i][1], lambda_dato) - frec_esperada_intervalo(matriz_ji_cuadrado[0][i][0], lambda_dato))*len(distExponencial)),4)
     unidor_invervalos(matriz_ji_cuadrado)
     ji_cuadrado = calcular_ji_cuadrado(matriz_ji_cuadrado)
-    print(ji_cuadrado)
 
-    if tipo_return:
-        return matriz_ji_cuadrado, distExponencial, ji_cuadrado
-    else:
-        return matriz_intervalos_frecuencias
+    return matriz_ji_cuadrado, distExponencial, ji_cuadrado
 
 
 def calcular_ji_cuadrado(matriz):

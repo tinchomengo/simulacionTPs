@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import numpy as np
 import sys
-sys.path.append('D:/Users/Usuario/Desktop/TP/simulacionTPs/TP2 Simulacion')
+sys.path.append('C:/Users/isaur/Downloads/simulacionTPs/TP2 Simulacion')
 from Distribuciones.uniforme import uniforme
 from Distribuciones.exponencial import exponencial
 from Distribuciones.normal import normal
@@ -29,7 +29,13 @@ def generar_tabla_ji_cuadrado(tabla):
 
 def mostrar_tabla_uniforme(cant_intervalo, a, b):
     numeros = generar_numeros_aleatorios(txt_muestra_uniforme) 
-    distribucionJiCuad,num,ji_calc = uniforme(numeros, int(cant_intervalo), int(a), int(b))    
+    distribucionJiCuad,num,ji_calc = uniforme(numeros, int(cant_intervalo), int(a), int(b))  
+
+    valor_ji = tk.StringVar()
+    valor_ji.set(str(ji_calc))  
+    lbl_Ji_cuadrado = tk.Label(frame_uniforme, text="Ji Cuadrado: "+ valor_ji.get())
+    lbl_Ji_cuadrado.grid(row=5, column=3, padx=5, pady=5)
+    
     actualiza_tabla(tabla_uniforme, num)
     actualizar_tabla_ji_cuadrado_uniforme(tabla_ji_cuadrado_uniforme, distribucionJiCuad)
     btn_generar_uniforme = tk.Button(frame_uniforme, text="Generar Grafico", 
@@ -46,8 +52,13 @@ def mostrar_tabla_uniforme(cant_intervalo, a, b):
 
 def mostra_tabla_normal(cant_intervalo,media,desviacion):
     numeros = generar_numeros_aleatorios(txt_muestra_normal)
+    distribucion,num,ji_calc = normal(numeros,int(cant_intervalo), int(media), int(desviacion))
 
-    distribucion,num,ji_calculado=normal(numeros,int(cant_intervalo), int(media), int(desviacion),True)
+    valor_ji = tk.StringVar()
+    valor_ji.set(str(ji_calc))  
+    lbl_Ji_cuadrado = tk.Label(frame_normal, text="Ji Cuadrado: "+ valor_ji.get())
+    lbl_Ji_cuadrado.grid(row=5, column=3, padx=5, pady=5)
+
     actualiza_tabla(tabla_normal_1, num)
 
     actualizar_tabla_ji_cuadrado_normal(tabla_ji_cuadrado_normal,distribucion)
@@ -64,7 +75,13 @@ def mostra_tabla_normal(cant_intervalo,media,desviacion):
 
 def mostrar_tabla_exponencial(cant_intervalo, lambda_valor):
     numeros = generar_numeros_aleatorios(txt_muestra_exponencial)
-    distr, num, ji_cuadrado = exponencial(numeros, int(cant_intervalo), float(lambda_valor), True)
+    distr, num, ji_calc = exponencial(numeros, int(cant_intervalo), float(lambda_valor))
+
+    valor_ji = tk.StringVar()
+    valor_ji.set(str(ji_calc))  
+    lbl_Ji_cuadrado = tk.Label(frame_exponencial, text="Ji Cuadrado: "+ valor_ji.get())
+    lbl_Ji_cuadrado.grid(row=5, column=3, padx=5, pady=5)
+
     actualiza_tabla(tabla_exponencial, num)
     actualizar_tabla_ji_cuadrado(tabla_ji_cuadrado, distr)
     btn_generar_exponencial = tk.Button(frame_exponencial, text="Generar Grafico", 
@@ -75,8 +92,6 @@ def mostrar_tabla_exponencial(cant_intervalo, lambda_valor):
                                     ),
                                     cursor="hand2")
     btn_generar_exponencial.grid(row=2, column=1, columnspa=4, padx=5, pady=5)
-
-
 
 def actualizar_tabla_ji_cuadrado(tabla, datos):
     # Borra todos los elementos actuales de la tabla
@@ -208,15 +223,6 @@ lbl_intervalo.grid(row=0, column=2, padx=5, pady=5)
 cmb_intervalo_uniforme = ttk.Combobox(frame_uniforme, values=opciones_frecuencia, state="readonly")
 cmb_intervalo_uniforme.grid(row=0, column=3, padx=5, pady=5)
 
-##############################################################################
-ji = 10.5
-valor_ji = tk.StringVar()
-valor_ji.set(str(ji))
-
-lbl_Ji_cuadrado = tk.Label(frame_uniforme, text="Ji Cuadrado: "+ valor_ji.get())
-lbl_Ji_cuadrado.grid(row=5, column=3, padx=5, pady=5)
-##############################################################################
-
 lbl_a = tk.Label(frame_uniforme, text="A:")
 lbl_a.grid(row=1, column=0, padx=5, pady=5)
 
@@ -233,7 +239,7 @@ btn_generar_uniforme = tk.Button(frame_uniforme, text="Generar",
                                  command=lambda: mostrar_tabla_uniforme(
                                      cmb_intervalo_uniforme.get(),
                                      txt_a.get(),
-                                     txt_b.get()
+                                     txt_b.get(),
                                  ),
                                  cursor="hand2")
 btn_generar_uniforme.grid(row=2, column=1, columnspa=2, padx=5, pady=5)
@@ -273,15 +279,6 @@ lbl_intervalo.grid(row=0, column=2, padx=5, pady=5)
 
 cmb_intervalo_normal = ttk.Combobox(frame_normal, values=opciones_frecuencia, state="readonly")
 cmb_intervalo_normal.grid(row=0, column=3, padx=5, pady=5)
-
-##############################################################################
-ji = 10.5
-valor_ji = tk.StringVar()
-valor_ji.set(str(ji))
-
-lbl_Ji_cuadrado = tk.Label(frame_normal, text="Ji Cuadrado: "+ valor_ji.get())
-lbl_Ji_cuadrado.grid(row=5, column=3, padx=5, pady=5)
-##############################################################################
 
 lbl_media = tk.Label(frame_normal, text="Media:")
 lbl_media.grid(row=1, column=0, padx=5, pady=5)
@@ -355,15 +352,6 @@ lbl_lambda.grid(row=1, column=1, padx=5, pady=5)
 
 txt_lambda = tk.Entry(frame_exponencial)
 txt_lambda.grid(row=1, column=2, padx=5, pady=5)
-
-##############################################################################
-ji = 10.5
-valor_ji = tk.StringVar()
-valor_ji.set(str(ji))
-
-lbl_Ji_cuadrado = tk.Label(frame_exponencial, text="Ji Cuadrado: "+ valor_ji.get())
-lbl_Ji_cuadrado.grid(row=5, column=3, padx=5, pady=5)
-##############################################################################
 
 btn_generar_exponencial = tk.Button(frame_exponencial, text="Generar", 
                                     command=lambda: mostrar_tabla_exponencial(
