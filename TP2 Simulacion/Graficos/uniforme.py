@@ -9,7 +9,7 @@ def histograma_uniforme(data, dist, cant_intervalos):
     plt.ylabel('Frecuencia Observadas')
     plt.xlabel('Intervalos')
 
-    # Show interval limits and frequencies
+    # Mostrar límites de intervalos y frecuencias
     for i in range(len(dist[0])):
         lower, upper = dist[0][i]
         freq = dist[1][i]
