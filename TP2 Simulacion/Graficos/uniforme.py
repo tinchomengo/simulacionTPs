@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def histograma_uniforme(data, dist, cant_intervalos):
-    # Plot histogram
+    # Graficar histograma
     plt.figure(figsize=(7,4))
     plt.hist(data, bins=cant_intervalos, edgecolor='black')
     plt.title('Histograma Distribucion Uniforme')
