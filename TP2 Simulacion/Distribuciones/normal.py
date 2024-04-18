@@ -41,7 +41,9 @@ def normal(muestra,cantidad_intervalos ,media,desviacion):
                 matriz_ji_cuadrado[1][j] += 1
                 break
     #Formato de la matriz matriz_intervalos_frecuencias [      [ [LI1,LS1]  ,  [LI2,LS2] ]         ,      [FO1,FO2,FO3]]
-    matriz_intervalos_frecuencias = copy.deepcopy(matriz_ji_cuadrado)
+    
+    #matriz_intervalos_frecuencias = copy.deepcopy(matriz_ji_cuadrado)
+    
     matriz_ji_cuadrado.append([0 for _ in range(cantidad_intervalos)])
     for i in range(cantidad_intervalos):
         matriz_ji_cuadrado[2][i] = (frec_esperada_intervalo(matriz_ji_cuadrado[0][i][1], media,desviacion) - frec_esperada_intervalo(matriz_ji_cuadrado[0][i][0], media,desviacion))*len(dist_normal)

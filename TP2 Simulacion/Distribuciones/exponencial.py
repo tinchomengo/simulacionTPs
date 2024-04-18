@@ -9,7 +9,6 @@ def exponencial(muestra, cantidad_intervalos, lambda_dato):
         distExponencial[i] = generador_exponenciales(lambda_dato, muestra[i])
     max = np.max(distExponencial)
     min = np.min(distExponencial)
-    media = np.mean(distExponencial)
     rango = max - min
     ancho_intervalo = round(rango / cantidad_intervalos,4)
 
@@ -41,7 +40,8 @@ def exponencial(muestra, cantidad_intervalos, lambda_dato):
                 matriz_ji_cuadrado[1][j] += 1
                 break
     #Formato de la matriz matriz_intervalos_frecuencias [      [ [LI1,LS1]  ,  [LI2,LS2] ]         ,      [FO1,FO2,FO3]]
-    matriz_intervalos_frecuencias = copy.deepcopy(matriz_ji_cuadrado)
+    
+    #matriz_intervalos_frecuencias = copy.deepcopy(matriz_ji_cuadrado)
 
     
     matriz_ji_cuadrado.append([0 for _ in range(cantidad_intervalos)])
@@ -49,7 +49,6 @@ def exponencial(muestra, cantidad_intervalos, lambda_dato):
         matriz_ji_cuadrado[2][i] = round(((frec_esperada_intervalo(matriz_ji_cuadrado[0][i][1], lambda_dato) - frec_esperada_intervalo(matriz_ji_cuadrado[0][i][0], lambda_dato))*len(distExponencial)),4)
     unidor_invervalos(matriz_ji_cuadrado)
     ji_cuadrado = calcular_ji_cuadrado(matriz_ji_cuadrado)
-
     return matriz_ji_cuadrado, distExponencial, ji_cuadrado
 
 
