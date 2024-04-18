@@ -1,21 +1,24 @@
 import random
 
-def generar_numeros_aleatorios_uniformes(a, b, tamaño_muestra):
-    return round(a + (b - a) * random.uniform(0,1),4)
+def generar_numeros_aleatorios_uniformes(a, b, random):
+    return round(a + (b - a) * random,4)
 
 def calcular_intervalos(datos, num_intervalos):
     min_valor = min(datos)
     max_valor = max(datos)    
     intervalo_ancho = (max_valor - min_valor) / num_intervalos
+    #aplico comprension de lista
     intervalos = [round(min_valor + i * intervalo_ancho,4) for i in range(num_intervalos)]
+    #Agrego el max valor de la distribucion al array de intervalos
     intervalos.append(round((max_valor),4))
     return intervalos
 
 def calcular_frecuencias(datos, intervalos):
-    frecuencias = [0] * (len(intervalos) - 1)  # Se usa (len(intervalos) - 1) para excluir el intervalo adicional
+    # Uso el (len(intervalos) - 1) para excluir el intervalo adicional. Ej -> Array de intervalos = 5, entonces son 4 intervalos
+    frecuencias = [0] * (len(intervalos) - 1) 
     
     for dato in datos:
-        for i in range(len(intervalos) - 1):  # Se itera hasta el penúltimo intervalo
+        for i in range(len(intervalos) - 1):  #itero hasta el penultimo 
             if intervalos[i] <= dato < intervalos[i + 1]:
                 frecuencias[i] += 1
                 break
@@ -23,6 +26,7 @@ def calcular_frecuencias(datos, intervalos):
     return frecuencias
 
 def ji_cuadrado_observado(frecuencias_obs, frecuencias_esp):
+    #Con zip() genero tuplas de 2 valores donde cada tupla tiene el valor de la frec obs y esp de un intervalo. Luego voy sumando resultados
     return round(sum((frec_obs - frec_esp)**2 / frec_esp for frec_obs, frec_esp in zip(frecuencias_obs, frecuencias_esp)),4)
 
 def generar_frecuencias_esperadas(tamaño_muestra, num_intervalos):
@@ -34,40 +38,32 @@ def generar_frecuencias_esperadas(tamaño_muestra, num_intervalos):
     while i < len(frecuencias_esperadas) - 1:
         # Si la frecuencia esperada actual es menor a 5 y hay un elemento siguiente
         if frecuencias_esperadas[i] < 5 and i + 1 < len(frecuencias_esperadas):
-            # Sumamos la frecuencia esperada del siguiente elemento
+            # Sumo la frecuencia esperada del siguiente elemento
             frecuencias_esperadas[i] += frecuencias_esperadas[i + 1]
-            # Eliminamos el siguiente elemento
+            # Elimino el siguiente elemento
             frecuencias_esperadas.pop(i + 1)
         else:
             i += 1
     
-    # Verificar si el último elemento es menor a 5 y sumarlo al elemento anterior si es necesario
+    # Verifico si el ultimo intervalo es menor a 5 y si es asi lo sumo al intervalo anterior si es necesario
     if frecuencias_esperadas[-1] < 5 and len(frecuencias_esperadas) > 1:
         frecuencias_esperadas[-2] += frecuencias_esperadas[-1]
         del frecuencias_esperadas[-1]
-    
+
+    #Retorno la cantidad de intervalos y el array de frec esp 
     return len(frecuencias_esperadas), frecuencias_esperadas
 
-def calcular_frecuencia_observada(datos, intervalos):
-    frecuencias_obs = [0] * (len(intervalos) - 1)
-    
-    for dato in datos:
-        for i, (limite_inferior, limite_superior) in enumerate(intervalos):
-            if (limite_inferior <= dato) and (dato < limite_superior):
-                frecuencias_obs[i] += 1
-                break
 
-    return frecuencias_obs
-
-
-
-def uniforme(tamaño_muestra,intervalos,a,b):
-    distribucion_uniforme = [0]*len(tamaño_muestra)
+def uniforme(muestra,intervalos,a,b):
+    distribucion_uniforme = [0]*len(muestra)
     for i in range(len(distribucion_uniforme)):
-        distribucion_uniforme[i] = generar_numeros_aleatorios_uniformes(a,b,tamaño_muestra[i])
+        distribucion_uniforme[i] = generar_numeros_aleatorios_uniformes(a,b,muestra[i])
+   
+    interv_no_unidos=calcular_intervalos(distribucion_uniforme,intervalos)
+    frec_no_unidos=calcular_frecuencias(distribucion_uniforme,interv_no_unidos)
     # Generar números aleatorios uniformes
     #Verificar Frecuencias esperadas < 5 y generar nuevos intervalos
-    num_intervalos, frecuencias_esperadas = generar_frecuencias_esperadas(tamaño_muestra, intervalos)
+    num_intervalos, frecuencias_esperadas = generar_frecuencias_esperadas(muestra, intervalos)
     
     # Calcular intervalos y frecuencias
     intervalos_calculados = calcular_intervalos(distribucion_uniforme, num_intervalos)
@@ -77,6 +73,10 @@ def uniforme(tamaño_muestra,intervalos,a,b):
     # Calcular chi-cuadrado
     ji_cuadrado = ji_cuadrado_observado(frecuencias_observadas, frecuencias_esperadas)
 
+    intervalos_uniforme_sin_unir=[
+        [[interv_no_unidos[i], interv_no_unidos[i + 1]] for i in range(len(interv_no_unidos) - 1)],
+        frec_no_unidos 
+    ]
 
     intervalos_uniforme = [
         [[intervalos_calculados[i], intervalos_calculados[i + 1]] for i in range(len(intervalos_calculados) - 1)],

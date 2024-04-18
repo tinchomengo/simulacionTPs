@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import numpy as np
 import sys
-sys.path.append('C:/Users/isaur/Downloads/simulacionTPs/TP2 Simulacion')
+sys.path.append('C:/Users/matpo/Desktop/TP/simulacionTPs/TP2 Simulacion')
 from Distribuciones.uniforme import uniforme
 from Distribuciones.exponencial import exponencial
 from Distribuciones.normal import normal
@@ -50,9 +50,8 @@ def mostrar_tabla_uniforme(cant_intervalo, a, b):
 
 
 
-def mostra_tabla_normal(cant_intervalo,media,desviacion):
-    numeros = generar_numeros_aleatorios(txt_muestra_normal)
-    distribucion,num,ji_calc = normal(numeros,int(cant_intervalo), int(media), int(desviacion))
+def mostra_tabla_normal(muestra,cant_intervalo,media,desviacion):
+    distribucion,num,ji_calc = normal(int(muestra),int(cant_intervalo), float(media), float(desviacion))
 
     valor_ji = tk.StringVar()
     valor_ji.set(str(ji_calc))  
@@ -294,6 +293,7 @@ txt_desviacion.grid(row=1, column=3, padx=5, pady=5)
 
 btn_generar_normal =tk.Button(frame_normal, text="Generar", 
                                     command=lambda: mostra_tabla_normal(
+                                        txt_muestra_normal.get(),
                                         cmb_intervalo_normal.get(),
                                         txt_media.get(),
                                         txt_desviacion.get()

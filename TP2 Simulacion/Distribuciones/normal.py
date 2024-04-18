@@ -4,9 +4,8 @@ from scipy.stats import norm
 
 
 def normal(muestra,cantidad_intervalos ,media,desviacion):
-    dist_normal = [0]*len(muestra)
-    randoms = [0]*len(muestra)
-    dist_normal,randoms = generador_numeros_normales(len(muestra),media,desviacion )
+    dist_normal = [0]*muestra
+    dist_normal = generador_numeros_normales(muestra,media,desviacion )
 
     max = np.max(dist_normal)
     min = np.min(dist_normal)
@@ -63,8 +62,8 @@ def calcular_ji_cuadrado(matriz):
         ji_cuadrado += ((matriz[1][i] - matriz[2][i])**2) / matriz[2][i]
     return round(ji_cuadrado,4)
 def generador_numeros_normales(muestra, media, desviacion):
+    
     numeros_normales = []
-    randoms=[]
     for _ in range(muestra // 2):
         # Generar dos números aleatorios uniformemente distribuidos entre 0 y 1
         RND1 = np.random.uniform(0,1)
@@ -77,9 +76,7 @@ def generador_numeros_normales(muestra, media, desviacion):
         # Agregar N1 y N2 a la lista de números normales generados
         numeros_normales.append(N1)
         numeros_normales.append(N2)
-        randoms.append(RND1)
-        randoms.append(RND2)
-    return numeros_normales,randoms
+    return numeros_normales
 
 def frec_esperada_intervalo(limite,media, desviacion):
     return(round(norm.cdf(limite, loc=media, scale=desviacion),4))
