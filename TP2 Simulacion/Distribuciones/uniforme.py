@@ -59,8 +59,7 @@ def uniforme(muestra,intervalos,a,b):
     for i in range(len(distribucion_uniforme)):
         distribucion_uniforme[i] = generar_numeros_aleatorios_uniformes(a,b,muestra[i])
    
-    interv_no_unidos=calcular_intervalos(distribucion_uniforme,intervalos)
-    frec_no_unidos=calcular_frecuencias(distribucion_uniforme,interv_no_unidos)
+    
     # Generar números aleatorios uniformes
     #Verificar Frecuencias esperadas < 5 y generar nuevos intervalos
     num_intervalos, frecuencias_esperadas = generar_frecuencias_esperadas(muestra, intervalos)
@@ -73,10 +72,7 @@ def uniforme(muestra,intervalos,a,b):
     # Calcular chi-cuadrado
     ji_cuadrado = ji_cuadrado_observado(frecuencias_observadas, frecuencias_esperadas)
 
-    intervalos_uniforme_sin_unir=[
-        [[interv_no_unidos[i], interv_no_unidos[i + 1]] for i in range(len(interv_no_unidos) - 1)],
-        frec_no_unidos 
-    ]
+ 
 
     intervalos_uniforme = [
         [[intervalos_calculados[i], intervalos_calculados[i + 1]] for i in range(len(intervalos_calculados) - 1)],
