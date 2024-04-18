@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 import numpy as np
 import sys
-sys.path.append('D:/Users/Usuario/Desktop/Simulacion TP/simulacionTPs/TP2 Simulacion')
+sys.path.append('/Users/tinchomengo/Desktop/UTN/SIM/simulacionTPs/TP2 Simulacion')
 import exponencial
 import normal
 import uniforme
