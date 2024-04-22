@@ -47,8 +47,10 @@ def exponencial(muestra, cantidad_intervalos, lambda_dato):
     matriz_ji_cuadrado.append([0 for _ in range(cantidad_intervalos)])
     for i in range(cantidad_intervalos):
         matriz_ji_cuadrado[2][i] = round(((frec_esperada_intervalo(matriz_ji_cuadrado[0][i][1], lambda_dato) - frec_esperada_intervalo(matriz_ji_cuadrado[0][i][0], lambda_dato))*len(distExponencial)),4)
+    print(matriz_ji_cuadrado)
     unidor_invervalos(matriz_ji_cuadrado)
     ji_cuadrado = calcular_ji_cuadrado(matriz_ji_cuadrado)
+    
     return matriz_ji_cuadrado, distExponencial, ji_cuadrado
 
 

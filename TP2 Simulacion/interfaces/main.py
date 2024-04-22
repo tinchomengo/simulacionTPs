@@ -3,12 +3,12 @@ from tkinter import ttk
 import numpy as np
 import sys
 sys.path.append('/Users/tinchomengo/Desktop/UTN/SIM/simulacionTPs/TP2 Simulacion')
-import exponencial
-import normal
-import uniforme
-from Graficos.exponencial import histograma_exponencial
+from Distribuciones.exponencial import exponencial
+from Distribuciones.uniforme import uniforme
+from Distribuciones.normal import normal
 from Graficos.uniforme import histograma_uniforme
 from Graficos.normal import histograma_normal
+from Graficos.exponencial import histograma_exponencial
 
 def generar_tabla(tabla):
     tabla.heading("Indice", text="Indice")
@@ -16,7 +16,6 @@ def generar_tabla(tabla):
 
     tabla.column("Indice", width=60, anchor="center")
     tabla.column("Numero", width=150, anchor="center")
-
 
 def generar_tabla_ji_cuadrado(tabla):
     tabla.heading("#1", text="Intervalo")
@@ -27,8 +26,9 @@ def generar_tabla_ji_cuadrado(tabla):
     tabla.column("#2", width=130, anchor="center")  # Ancho igual para las otras dos columnas
     tabla.column("#3", width=130, anchor="center")
 
+# Mostrar tablas (y generar numeros RND, exceptg para normal, ya que se hace en normal.py)
 def mostrar_tabla_uniforme(cant_intervalo, a, b):
-    numeros = generar_numeros_aleatorios(txt_muestra_uniforme) 
+    numeros = generar_numeros_aleatorios(txt_muestra_uniforme) # Normal se genera en normal.py
     distribucionJiCuad,num,ji_calc = uniforme(numeros, int(cant_intervalo), int(a), int(b))  
 
     valor_ji = tk.StringVar()
@@ -37,7 +37,7 @@ def mostrar_tabla_uniforme(cant_intervalo, a, b):
     lbl_Ji_cuadrado.grid(row=5, column=3, padx=5, pady=5)
     
     actualiza_tabla(tabla_uniforme, num)
-    actualizar_tabla_ji_cuadrado_uniforme(tabla_ji_cuadrado_uniforme, distribucionJiCuad)
+    actualizar_tabla_ji_cuadrado(tabla_ji_cuadrado_uniforme, distribucionJiCuad)
     btn_generar_uniforme = tk.Button(frame_uniforme, text="Generar Grafico", 
                                     command=lambda: histograma_uniforme(
                                         num,
@@ -46,9 +46,6 @@ def mostrar_tabla_uniforme(cant_intervalo, a, b):
                                     ),
                                     cursor="hand2")
     btn_generar_uniforme.grid(row=2, column=1, columnspa=4, padx=5, pady=5)
-
-
-
 
 def mostra_tabla_normal(muestra,cant_intervalo,media,desviacion):
     distribucion,num,ji_calc = normal(int(muestra),int(cant_intervalo), float(media), float(desviacion))
@@ -60,7 +57,7 @@ def mostra_tabla_normal(muestra,cant_intervalo,media,desviacion):
 
     actualiza_tabla(tabla_normal_1, num)
 
-    actualizar_tabla_ji_cuadrado_normal(tabla_ji_cuadrado_normal,distribucion)
+    actualizar_tabla_ji_cuadrado(tabla_ji_cuadrado_normal,distribucion)
 
     btn_generar_normal = tk.Button(frame_normal, text="Generar Grafico", 
                                     command=lambda: histograma_normal(
@@ -71,9 +68,8 @@ def mostra_tabla_normal(muestra,cant_intervalo,media,desviacion):
                                     cursor="hand2")
     btn_generar_normal.grid(row=2, column=1, columnspa=4, padx=5, pady=5)
 
-
 def mostrar_tabla_exponencial(cant_intervalo, lambda_valor):
-    numeros = generar_numeros_aleatorios(txt_muestra_exponencial)
+    numeros = generar_numeros_aleatorios(txt_muestra_exponencial) # Normal se genera en normal.py
     distr, num, ji_calc = exponencial(numeros, int(cant_intervalo), float(lambda_valor))
 
     valor_ji = tk.StringVar()
@@ -92,6 +88,7 @@ def mostrar_tabla_exponencial(cant_intervalo, lambda_valor):
                                     cursor="hand2")
     btn_generar_exponencial.grid(row=2, column=1, columnspa=4, padx=5, pady=5)
 
+# Actualiza los datos de la interfaz de la tabla de Ji Cuadrado (para las 3 distribuciones)
 def actualizar_tabla_ji_cuadrado(tabla, datos):
     # Borra todos los elementos actuales de la tabla
     tabla.delete(*tabla.get_children())
@@ -107,41 +104,12 @@ def actualizar_tabla_ji_cuadrado(tabla, datos):
         fe = datos[2][i]
         tabla.insert("", "end", values=(intervalo, fo, fe))
 
-def actualizar_tabla_ji_cuadrado_uniforme(tabla, datos):
-    # Borra todos los elementos actuales de la tabla
-    tabla.delete(*tabla.get_children())
-
-    # Asegúrate de que las listas tengan la misma longitud
-    if len(datos[0]) != len(datos[1]) or len(datos[1]) != len(datos[2]):
-        raise ValueError("Las listas de datos deben tener la misma longitud")
-
-    # Inserta los nuevos datos en la tabla
-    for i in range(len(datos[0])):
-        intervalo = datos[0][i]
-        fo = datos[1][i]
-        fe = datos[2][i]
-        tabla.insert("", "end", values=(intervalo, fo, fe))
-
-def actualizar_tabla_ji_cuadrado_normal(tabla, datos):
-    # Borra todos los elementos actuales de la tabla
-    tabla.delete(*tabla.get_children())
-
-    # Asegúrate de que las listas tengan la misma longitud
-    if len(datos[0]) != len(datos[1]) or len(datos[1]) != len(datos[2]):
-        raise ValueError("Las listas de datos deben tener la misma longitud")
-
-    # Inserta los nuevos datos en la tabla
-    for i in range(len(datos[0])):
-        intervalo = datos[0][i]
-        fo = datos[1][i]
-        fe = datos[2][i]
-        tabla.insert("", "end", values=(intervalo, fo, fe))
 
 def generar_numeros_aleatorios(txt):
     numeros = []
     if validar_muestra(txt.get()):
         tamano = int(txt.get())
-        numeros = np.random.uniform(0.0001, 1, tamano)    
+        numeros = np.random.uniform(0, 1, tamano)    
         return numeros
 
 
@@ -153,7 +121,7 @@ def actualiza_tabla(tabla, numeros):
     for data in data_to_insert:
         tabla.insert("", "end", values=data)
 
-
+# Valida que muestra esté entre (1;1000000)
 def validar_muestra(numero):
     try:
         num = int(numero)
@@ -164,7 +132,7 @@ def validar_muestra(numero):
     except ValueError:
         return False
 
-
+# De acá para abajo es todo para generación de interfaz
 def mostrar_uniforme():
     frame_uniforme.grid(row=1, column=0, padx=20, pady=20)
     frame_normal.grid_forget()

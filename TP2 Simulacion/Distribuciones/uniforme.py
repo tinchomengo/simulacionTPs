@@ -1,5 +1,3 @@
-import random
-
 def generar_numeros_aleatorios_uniformes(a, b, random):
     return round(a + (b - a) * random,4)
 
@@ -32,7 +30,7 @@ def ji_cuadrado_observado(frecuencias_obs, frecuencias_esp):
 def generar_frecuencias_esperadas(tamaño_muestra, num_intervalos):
     frecuencia_esperada = round(len(tamaño_muestra) / num_intervalos, 4)
     frecuencias_esperadas = [frecuencia_esperada] * num_intervalos
-    
+    #print(frecuencias_esperadas)
     # Iteracion
     i = 0
     while i < len(frecuencias_esperadas) - 1:
@@ -79,7 +77,8 @@ def uniforme(muestra,intervalos,a,b):
         frecuencias_observadas,
         frecuencias_esperadas
     ]
-
+    #print(intervalos_uniforme)
+    #print(distribucion_uniforme)
     return intervalos_uniforme,distribucion_uniforme,ji_cuadrado
 
 

@@ -13,7 +13,7 @@ def normal(muestra,cantidad_intervalos ,media,desviacion):
     rango = max - min
     ancho_intervalo = round(rango / cantidad_intervalos,4)
 
-    #Formato de la matriz matriz_ji_cuadrado [      [ [LI1,LS1]  ,  [LI2,LS2] ]         ,      [FO1,FO2,FO3]       ,       [FE1,FE2,FE3]  ]
+    #Formato de la matriz matriz_ji_cuadrado [ [ [LI1,LS1] , [LI2,LS2] ] , [FO1,FO2,FO3] , [FE1,FE2,FE3]  ]
     matriz_ji_cuadrado = [[0 for _ in range(cantidad_intervalos)] for _ in range(2)]
     for i in range (cantidad_intervalos):
         matriz_ji_cuadrado[0][i] = [0,0]
@@ -46,7 +46,7 @@ def normal(muestra,cantidad_intervalos ,media,desviacion):
     
     matriz_ji_cuadrado.append([0 for _ in range(cantidad_intervalos)])
     for i in range(cantidad_intervalos):
-        matriz_ji_cuadrado[2][i] = (frec_esperada_intervalo(matriz_ji_cuadrado[0][i][1], media,desviacion) - frec_esperada_intervalo(matriz_ji_cuadrado[0][i][0], media,desviacion))*len(dist_normal)
+        matriz_ji_cuadrado[2][i] = round(((frec_esperada_intervalo(matriz_ji_cuadrado[0][i][1], media,desviacion) - frec_esperada_intervalo(matriz_ji_cuadrado[0][i][0], media,desviacion))*len(dist_normal)),4)
     unidor_invervalos(matriz_ji_cuadrado)
 
     contador = 0
@@ -63,9 +63,15 @@ def calcular_ji_cuadrado(matriz):
     for i in range(len(matriz[0])):
         ji_cuadrado += ((matriz[1][i] - matriz[2][i])**2) / matriz[2][i]
     return round(ji_cuadrado,4)
+
+
 def generador_numeros_normales(muestra, media, desviacion):
-    
+    # Usamos metodo de Box-Muller
     numeros_normales = []
+    if (muestra>1000000):
+        return -1
+    
+
     for _ in range(muestra // 2):
         # Generar dos números aleatorios uniformemente distribuidos entre 0 y 1
         RND1 = np.random.uniform(0,1)
@@ -78,6 +84,14 @@ def generador_numeros_normales(muestra, media, desviacion):
         # Agregar N1 y N2 a la lista de números normales generados
         numeros_normales.append(N1)
         numeros_normales.append(N2)
+        #print("Numeros normales ->", numeros_normales)
+    
+    if (muestra % 2) != 0:
+        RND1 = np.random.uniform(0,1)
+        RND2 = np.random.uniform(0,1)
+        N1 = round(((np.sqrt((-2) * np.log(RND1)) * np.cos(2 * np.pi * RND2)) * desviacion) + media, 4)    
+        # Agregar N1 y N2 a la lista de números normales generados
+        numeros_normales.append(N1)
     return numeros_normales
 
 def frec_esperada_intervalo(limite,media, desviacion):
