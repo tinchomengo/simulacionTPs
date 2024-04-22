@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 import numpy as np
 import sys
-sys.path.append('/Users/tinchomengo/Desktop/UTN/SIM/simV2/TP2 Simulacion')
+sys.path.append('C:/Users/isaur/Desktop/bvvn/simulacionTPs/TP2 Simulacion V2')
 from Distribuciones.exponencial import exponencial
 from Distribuciones.uniforme import uniforme
 from Distribuciones.normal import normal
@@ -108,7 +108,6 @@ def actualizar_tabla_ji_cuadrado(tabla, datos, ji_array):
         fo = datos[1][i]
         fe = datos[2][i]
         ji = ji_array[i]
-        print(ji)
         tabla.insert("", "end", values=(intervalo, fo, fe, ji))
 
 
