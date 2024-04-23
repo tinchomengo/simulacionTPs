@@ -44,16 +44,6 @@ def exponencial(muestra, cantidad_intervalos, lambda_dato):
     matriz_ji_cuadrado.append([0 for _ in range(cantidad_intervalos)])
     for i in range(cantidad_intervalos):
         matriz_ji_cuadrado[2][i] = round(((frec_esperada_intervalo(matriz_ji_cuadrado[0][i][1], lambda_dato) - frec_esperada_intervalo(matriz_ji_cuadrado[0][i][0], lambda_dato))*len(distExponencial)),4)
-    print(matriz_ji_cuadrado)
-    contador_1 = 0
-    contador_2 = 0
-    for i in range(len(matriz_ji_cuadrado[2])):
-        contador_1 += matriz_ji_cuadrado[1][i]
-        contador_2 += matriz_ji_cuadrado[2][i]
-    
-    
-
-    
     unidor_invervalos(matriz_ji_cuadrado)
     ji_cuadrado, ji = calcular_ji_cuadrado(matriz_ji_cuadrado)
     return matriz_ji_cuadrado, distExponencial, ji_cuadrado, ji
@@ -97,9 +87,6 @@ def unidor_invervalos(matriz):
             #Si si, entonces empiezo a buscar el intervalo con el que se combinara
             sigue_buscando_intervalo2 = True
             while sigue_buscando_intervalo2 and j <= len(matriz[2]):
-
-
-
                 if j == len(matriz[2]) and sumar_frec_esp+matriz[2][i] < 5:
                     matriz[0][i-1][1] = matriz[0][i][1]
                     sumar_frec_obs += matriz[1][i]
@@ -110,15 +97,6 @@ def unidor_invervalos(matriz):
                     sigue_buscando_intervalo2 = False
                     sigue_buscando_intervalo1 = False
                     continue
-
-                # if j == len(matriz[2]) and sumar_frec_esp+matriz[2][i] >= 5 and sumar_frec_esp == 0:
-                #     matriz[1][i] += sumar_frec_obs
-                #     matriz[2][i] += sumar_frec_esp
-                #     sigue_buscando_intervalo2 = False
-                #     sigue_buscando_intervalo1 = False
-                #     continue
-
-                #Si el valor actual mas el siguiente es mayor o igual a 5, significa que debere asignar el limite inferior al intervalo actual (el limite superior estara dado por el intervalo i actual)
                 if (sumar_frec_esp+matriz[2][i]) >= 5:
                     if(j == len(matriz[2])):
                         matriz[1][i] += sumar_frec_obs
@@ -126,7 +104,7 @@ def unidor_invervalos(matriz):
                         sigue_buscando_intervalo2 = False
                         sigue_buscando_intervalo1 = False
                         continue
-                    matriz[0][i][1] = matriz[0][j][1]
+                    matriz[0][i][1] = matriz[0][j][0]
                     matriz[1][i] += sumar_frec_obs
                     matriz[2][i] += sumar_frec_esp
                     sigue_buscando_intervalo2 = False
