@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 import numpy as np
 import sys
-sys.path.append('C:/Users/isaur/Desktop/cacacaaca/simulacionTPs/TP2 Simulacion V2')
+sys.path.append('C:/Users/matpo/Desktop/TP/simulacionTPs/TP2 Simulacion V2')
 from Distribuciones.exponencial import exponencial
 from Distribuciones.uniforme import uniforme
 from Distribuciones.normal import normal
@@ -34,13 +34,24 @@ def generar_tabla_ji_cuadrado(tabla):
 # Mostrar tablas (y generar numeros RND, exceptg para normal, ya que se hace en normal.py)
 def mostrar_tabla_uniforme(cant_intervalo, a, b):
     numeros = generar_numeros_aleatorios(txt_muestra_uniforme) # Normal se genera en normal.py
-    distribucionJiCuad,num,ji_calc, ji = uniforme(numeros, int(cant_intervalo), int(a), int(b))  
+    distribucionJiCuad,num,ji_calc, ji,fo,fe = uniforme(numeros, int(cant_intervalo), int(a), int(b)) 
 
+    valor_fo =  tk.StringVar()
+    valor_fe =  tk.StringVar()
     valor_ji = tk.StringVar()
     valor_ji.set(str(ji_calc))  
+    valor_fo.set(str(fo))  
+    valor_fe.set(str(fe))  
+
     lbl_Ji_cuadrado = tk.Label(frame_uniforme, text="Ji Cuadrado: "+ valor_ji.get())
-    lbl_Ji_cuadrado.grid(row=5, column=3, padx=5, pady=5)
-    
+    lbl_fo = tk.Label(frame_uniforme, text="Frecuencia Obs: "+ valor_fo.get())
+    lbl_fe = tk.Label(frame_uniforme, text="Frecuencia Esp: "+ valor_fe.get())
+
+    lbl_Ji_cuadrado.grid(row=5, column=3, pady=5, padx=(1, 5))  # Columna 0
+    lbl_fo.grid(row=5, column=1, pady=5, padx=(5, 5))          # Columna 1
+    lbl_fe.grid(row=5, column=2, pady=5, padx=(5, 5))           # Columna 2
+
+
     actualiza_tabla(tabla_uniforme, num)
     actualizar_tabla_ji_cuadrado(tabla_ji_cuadrado_uniforme, distribucionJiCuad,ji)
     btn_generar_uniforme = tk.Button(frame_uniforme, text="Generar Grafico", 
@@ -50,15 +61,27 @@ def mostrar_tabla_uniforme(cant_intervalo, a, b):
                                         int(cant_intervalo)
                                     ),
                                     cursor="hand2")
-    btn_generar_uniforme.grid(row=5, column=1, columnspa=4, padx=5, pady=5)
+    btn_generar_uniforme.grid(row=2, column=1, columnspa=4, padx=5, pady=5)
 
 def mostra_tabla_normal(muestra,cant_intervalo,media,desviacion):
-    distribucion,num,ji_calc, ji = normal(int(muestra),int(cant_intervalo), float(media), float(desviacion))
+    distribucion,num,ji_calc, ji,fo,fe = normal(int(muestra),int(cant_intervalo), float(media), float(desviacion))
 
+
+    valor_fo =  tk.StringVar()
+    valor_fe =  tk.StringVar()
     valor_ji = tk.StringVar()
     valor_ji.set(str(ji_calc))  
+    valor_fo.set(str(fo))  
+    valor_fe.set(str(fe))  
+
     lbl_Ji_cuadrado = tk.Label(frame_normal, text="Ji Cuadrado: "+ valor_ji.get())
-    lbl_Ji_cuadrado.grid(row=5, column=3, padx=5, pady=5)
+    lbl_fo = tk.Label(frame_normal, text="Frecuencia Obs: "+ valor_fo.get())
+    lbl_fe = tk.Label(frame_normal, text="Frecuencia Esp: "+ valor_fe.get())
+
+    lbl_Ji_cuadrado.grid(row=5, column=3, pady=5, padx=(1, 5))  # Columna 0
+    lbl_fo.grid(row=5, column=1, pady=5, padx=(5, 5))          # Columna 1
+    lbl_fe.grid(row=5, column=2, pady=5, padx=(5, 5))           # Columna 2
+
 
     actualiza_tabla(tabla_normal_1, num)
 
@@ -75,12 +98,23 @@ def mostra_tabla_normal(muestra,cant_intervalo,media,desviacion):
 
 def mostrar_tabla_exponencial(cant_intervalo, lambda_valor):
     numeros = generar_numeros_aleatorios(txt_muestra_exponencial) # Normal se genera en normal.py
-    distr, num, ji_calc, ji = exponencial(numeros, int(cant_intervalo), float(lambda_valor))
+    distr, num, ji_calc, ji,fo,fe = exponencial(numeros, int(cant_intervalo), float(lambda_valor))
 
+    valor_fo =  tk.StringVar()
+    valor_fe =  tk.StringVar()
     valor_ji = tk.StringVar()
     valor_ji.set(str(ji_calc))  
+    valor_fo.set(str(fo))  
+    valor_fe.set(str(fe))  
+
     lbl_Ji_cuadrado = tk.Label(frame_exponencial, text="Ji Cuadrado: "+ valor_ji.get())
-    lbl_Ji_cuadrado.grid(row=5, column=3, padx=5, pady=5)
+    lbl_fo = tk.Label(frame_exponencial, text="Frecuencia Obs: "+ valor_fo.get())
+    lbl_fe = tk.Label(frame_exponencial, text="Frecuencia Esp: "+ valor_fe.get())
+
+    lbl_Ji_cuadrado.grid(row=5, column=3, pady=5, padx=(1, 5))  # Columna 0
+    lbl_fo.grid(row=5, column=1, pady=5, padx=(5, 5))          # Columna 1
+    lbl_fe.grid(row=5, column=2, pady=5, padx=(5, 5))           # Columna 2
+
 
     actualiza_tabla(tabla_exponencial, num)
     actualizar_tabla_ji_cuadrado(tabla_ji_cuadrado, distr,ji)
