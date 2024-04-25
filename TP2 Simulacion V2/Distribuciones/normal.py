@@ -2,7 +2,7 @@ import numpy as np
 import copy
 from scipy.stats import norm
 import sys
-sys.path.append('C:/Users/isaur/Desktop/cacacaaca/simulacionTPs/TP2 Simulacion V2/Distribuciones')
+sys.path.append('/Users/tinchomengo/Desktop/UTN/SIM/simulacionTPs/TP2 Simulacion V2/Distribuciones')
 from exponencial import unidor_invervalos
 
 
