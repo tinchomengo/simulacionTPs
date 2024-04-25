@@ -47,7 +47,8 @@ def normal(muestra,cantidad_intervalos ,media,desviacion):
         matriz_ji_cuadrado[2][i] = round(((frec_esperada_intervalo(matriz_ji_cuadrado[0][i][1], media,desviacion) - frec_esperada_intervalo(matriz_ji_cuadrado[0][i][0], media,desviacion))*len(dist_normal)),4)
     unidor_invervalos(matriz_ji_cuadrado)
     ji_calc, ji=calcular_ji_cuadrado(matriz_ji_cuadrado)
-    return matriz_ji_cuadrado, dist_normal, ji_calc, ji
+    tot_fo,tot_fe= sumar_frecuencias(matriz_ji_cuadrado)
+    return matriz_ji_cuadrado, dist_normal, ji_calc, ji,tot_fo,tot_fe
 
 
 def calcular_ji_cuadrado(matriz):
@@ -91,6 +92,10 @@ def generador_numeros_normales(muestra, media, desviacion):
 def frec_esperada_intervalo(limite,media, desviacion):
     return(round(norm.cdf(limite, loc=media, scale=desviacion),4))
 
+def sumar_frecuencias(matriz):
+    total_fo = round(sum(matriz[1]),4)
+    total_fe = round(sum(matriz[2]),4)
+    return total_fo, total_fe
 
 
 

@@ -39,14 +39,15 @@ def exponencial(muestra, cantidad_intervalos, lambda_dato):
                 #Si se verifica que se encuentra en el intervalo se suma
                 matriz_ji_cuadrado[1][j] += 1
                 break
-            
+                
     #Formato de la matriz matriz_intervalos_frecuencias [      [ [LI1,LS1]  ,  [LI2,LS2] ]         ,      [FO1,FO2,FO3]]
     matriz_ji_cuadrado.append([0 for _ in range(cantidad_intervalos)])
     for i in range(cantidad_intervalos):
         matriz_ji_cuadrado[2][i] = round(((frec_esperada_intervalo(matriz_ji_cuadrado[0][i][1], lambda_dato) - frec_esperada_intervalo(matriz_ji_cuadrado[0][i][0], lambda_dato))*len(distExponencial)),4)
     unidor_invervalos(matriz_ji_cuadrado)
     ji_cuadrado, ji = calcular_ji_cuadrado(matriz_ji_cuadrado)
-    return matriz_ji_cuadrado, distExponencial, ji_cuadrado, ji
+    tot_fo,tot_fe=sumar_frecuencias(matriz_ji_cuadrado)
+    return matriz_ji_cuadrado, distExponencial, ji_cuadrado, ji,tot_fo,tot_fe
 
 
 def calcular_ji_cuadrado(matriz):
@@ -68,6 +69,11 @@ def eliminar_intervalos(matriz, posicion):
     matriz[0].pop(posicion)
     matriz[1].pop(posicion)
     matriz[2].pop(posicion)
+def sumar_frecuencias(matriz):
+    total_fo = round(sum(matriz[1]),4)
+    total_fe = round(sum(matriz[2]),4)
+    return total_fo, total_fe
+
     
 def unidor_invervalos(matriz):
     sumar_frec_obs = 0

@@ -77,19 +77,23 @@ def uniforme(muestra,intervalos,a,b):
         frecuencias_observadas,
         frecuencias_esperadas
     ]
+    tot_fo,tot_fe=sumar_frecuencias(intervalos_uniforme)
     #print(intervalos_uniforme)
     #print(distribucion_uniforme)
-    return intervalos_uniforme,distribucion_uniforme,ji_cuadrado, ji
+    return intervalos_uniforme,distribucion_uniforme,ji_cuadrado, ji,tot_fo,tot_fe
 
 
 def ji_por_intervalo(fo,fe):
     ji = [0]*len(fo)
     for i in range(len(fo)):
-        print(i)
-        print(ji)
         temp = ((fo[i] - fe[i])**2) / fe[i]
         ji[i] = temp
-    print(ji)
     return ji
 
+
+def sumar_frecuencias(matriz):
+    total_fo = round(sum(matriz[1]),4)
+    total_fe = round(sum(matriz[1]),4)
+
+    return total_fo, total_fe
 
