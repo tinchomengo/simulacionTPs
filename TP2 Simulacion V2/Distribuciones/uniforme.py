@@ -1,99 +1,75 @@
-def generar_numeros_aleatorios_uniformes(a, b, random):
-    return round(a + (b - a) * random,4)
-
-def calcular_intervalos(datos, num_intervalos):
-    min_valor = min(datos)
-    max_valor = max(datos)    
-    intervalo_ancho = (max_valor - min_valor) / num_intervalos
-    #aplico comprension de lista
-    intervalos = [round(min_valor + i * intervalo_ancho,4) for i in range(num_intervalos)]
-    #Agrego el max valor de la distribucion al array de intervalos
-    intervalos.append(round((max_valor),4))
-    return intervalos
-
-def calcular_frecuencias(datos, intervalos):
-    # Uso el (len(intervalos) - 1) para excluir el intervalo adicional. Ej -> Array de intervalos = 5, entonces son 4 intervalos
-    frecuencias = [0] * (len(intervalos) - 1) 
-    
-    for dato in datos:
-        for i in range(len(intervalos) - 1):  #itero hasta el penultimo 
-            if intervalos[i] <= dato < intervalos[i + 1]:
-                frecuencias[i] += 1
-                break
-    frecuencias[-1]+=1
-    return frecuencias
-
-def ji_cuadrado_observado(frecuencias_obs, frecuencias_esp):
-    #Con zip() genero tuplas de 2 valores donde cada tupla tiene el valor de la frec obs y esp de un intervalo. Luego voy sumando resultados
-    return round(sum((frec_obs - frec_esp)**2 / frec_esp for frec_obs, frec_esp in zip(frecuencias_obs, frecuencias_esp)),4)
-
-def generar_frecuencias_esperadas(tamaño_muestra, num_intervalos):
-    frecuencia_esperada = round(len(tamaño_muestra) / num_intervalos, 4)
-    frecuencias_esperadas = [frecuencia_esperada] * num_intervalos
-    #print(frecuencias_esperadas)
-    # Iteracion
-    i = 0
-    while i < len(frecuencias_esperadas) - 1:
-        # Si la frecuencia esperada actual es menor a 5 y hay un elemento siguiente
-        if frecuencias_esperadas[i] < 5 and i + 1 < len(frecuencias_esperadas):
-            # Sumo la frecuencia esperada del siguiente elemento
-            frecuencias_esperadas[i] += frecuencias_esperadas[i + 1]
-            # Elimino el siguiente elemento
-            frecuencias_esperadas.pop(i + 1)
-        else:
-            i += 1
-    
-    # Verifico si el ultimo intervalo es menor a 5 y si es asi lo sumo al intervalo anterior si es necesario
-    if frecuencias_esperadas[-1] < 5 and len(frecuencias_esperadas) > 1:
-        frecuencias_esperadas[-2] += frecuencias_esperadas[-1]
-        del frecuencias_esperadas[-1]
-
-    #Retorno la cantidad de intervalos y el array de frec esp 
-    return len(frecuencias_esperadas), frecuencias_esperadas
+import numpy as np
+import copy
+from scipy.stats import norm
+import sys
+sys.path.append('/Users/tinchomengo/Desktop/UTN/SIM/simulacionTPs/TP2 Simulacion V2/Distribuciones')
+from exponencial import unidor_invervalos
 
 
 def uniforme(muestra,intervalos,a,b):
     distribucion_uniforme = [0]*len(muestra)
     for i in range(len(distribucion_uniforme)):
         distribucion_uniforme[i] = generar_numeros_aleatorios_uniformes(a,b,muestra[i])
-   
-    
-    # Generar números aleatorios uniformes
-    #Verificar Frecuencias esperadas < 5 y generar nuevos intervalos
-    num_intervalos, frecuencias_esperadas = generar_frecuencias_esperadas(muestra, intervalos)
-    
-    # Calcular intervalos y frecuencias
-    intervalos_calculados = calcular_intervalos(distribucion_uniforme, num_intervalos)
-    frecuencias_observadas = calcular_frecuencias(distribucion_uniforme, intervalos_calculados)
-    
 
-    # Calcular chi-cuadrado
-    ji_cuadrado = ji_cuadrado_observado(frecuencias_observadas, frecuencias_esperadas)
-    ji = ji_por_intervalo(frecuencias_observadas, frecuencias_esperadas)
- 
+    max = np.max(distribucion_uniforme)
+    min = np.min(distribucion_uniforme)
+    rango = max - min
+    ancho_intervalo = round(rango / intervalos,4)
 
-    intervalos_uniforme = [
-        [[intervalos_calculados[i], intervalos_calculados[i + 1]] for i in range(len(intervalos_calculados) - 1)],
-        frecuencias_observadas,
-        frecuencias_esperadas
-    ]
-    tot_fo,tot_fe=sumar_frecuencias(intervalos_uniforme)
-    #print(intervalos_uniforme)
-    #print(distribucion_uniforme)
-    return intervalos_uniforme,distribucion_uniforme,ji_cuadrado, ji,tot_fo,tot_fe
+    #Formato de la matriz matriz_ji_cuadrado [ [ [LI1,LS1] , [LI2,LS2] ] , [FO1,FO2,FO3] , [FE1,FE2,FE3]  ]
+    matriz_ji_cuadrado = [[0 for _ in range(intervalos)] for _ in range(2)]
+    for i in range (intervalos):
+        matriz_ji_cuadrado[0][i] = [0,0]
+
+    #Coloco el primer limite inferior y superior
+    matriz_ji_cuadrado[0][0] = [min, round(min+ancho_intervalo,4)]
 
 
-def ji_por_intervalo(fo,fe):
-    ji = [0]*len(fo)
-    for i in range(len(fo)):
-        temp = ((fo[i] - fe[i])**2) / fe[i]
-        ji[i] = temp
-    return ji
+    #Defino todos los limites inferiores y superiores restantes
+    for i in range(1 ,intervalos):
+        matriz_ji_cuadrado[0][i][0] = round(matriz_ji_cuadrado[0][i-1][1],4)
+        matriz_ji_cuadrado[0][i][1] = round(matriz_ji_cuadrado[0][i][0] + ancho_intervalo,4)
+        
+    #Coloco el ultimo limite superior para que pueda ser contado correctamente
+    matriz_ji_cuadrado[0][-1][1] = max+0.0001
 
+    #Cuento la frecuencia observada
+    for i in range(len(distribucion_uniforme)):
+        
+        for j in range(len(matriz_ji_cuadrado[0])):
+            #Verifico si el dato tomado se encuentra dentro del intervalo analizado
+            if matriz_ji_cuadrado[0][j][0] <= distribucion_uniforme[i] < matriz_ji_cuadrado[0][j][1]:
+                #Si se verifica que se encuentra en el intervalo se suma
+                matriz_ji_cuadrado[1][j] += 1
+                break
+    matriz_ji_cuadrado.append([0 for _ in range(intervalos)])
+    frec_esperada_intervalo(len(muestra), intervalos, matriz_ji_cuadrado)
+    matriz_intervalos_frecuencias = copy.deepcopy(matriz_ji_cuadrado)
+
+    unidor_invervalos(matriz_ji_cuadrado)
+    ji_calc, ji=calcular_ji_cuadrado(matriz_ji_cuadrado)
+    tot_fo,tot_fe= sumar_frecuencias(matriz_ji_cuadrado)
+    return matriz_ji_cuadrado, matriz_intervalos_frecuencias, distribucion_uniforme, ji_calc, ji,tot_fo,tot_fe
+
+
+def calcular_ji_cuadrado(matriz):
+    ji_cuadrado = 0
+    ji = []
+    for i in range(len(matriz[0])):
+        temp = ((matriz[1][i] - matriz[2][i])**2) / matriz[2][i]
+        ji_cuadrado += temp
+        ji.append(temp)
+    return round(ji_cuadrado,4), ji
+
+def frec_esperada_intervalo(tamaño_muestra, num_intervalos, matriz):
+    frecuencia_esperada = round(tamaño_muestra / num_intervalos, 4)
+    for i in range(len(matriz[2])):
+        matriz[2][i] = frecuencia_esperada
 
 def sumar_frecuencias(matriz):
     total_fo = round(sum(matriz[1]),4)
-    total_fe = round(sum(matriz[1]),4)
-
+    total_fe = round(sum(matriz[2]),4)
     return total_fo, total_fe
 
+def generar_numeros_aleatorios_uniformes(a, b, random):
+    return round(a + (b - a) * random,4)
