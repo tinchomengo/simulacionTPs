@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QLineEdit
+from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.uic import loadUi
 from simulacion import simulacion
 class MainWindow(QMainWindow):

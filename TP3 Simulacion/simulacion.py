@@ -49,7 +49,6 @@ def simulacion(tupla_probs):
         for i in range(4):
             fila[fila_usar][5] += fila[fila_usar][3][i][1]
 
-
         # Si es una cuarta semana, se realiza el sorteo      
         if((fila[fila_usar][0])%4 == 0):
             if(acumulador_vendidos >=4):
@@ -81,15 +80,17 @@ def simulacion(tupla_probs):
 
 def funcionBuscar(tupla_determinar, rnd):
     acumulador = 0
+    
     for i in range(len(tupla_determinar)):
+        valor_comparar = tupla_determinar[i][0]/100
         
         if i == 0:
-            if rnd < tupla_determinar[i][0]/100:
+            if rnd < valor_comparar:
                 return tupla_determinar[i][1]
         else:
-            if acumulador <= rnd < tupla_determinar[i][0]/100+acumulador:
+            if acumulador <= rnd < valor_comparar+acumulador:
                 return tupla_determinar[i][1]
-        acumulador += tupla_determinar[i][0]/100
+        acumulador += valor_comparar
 
 def reiniciar_fila():
     return [0,[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0,0]
