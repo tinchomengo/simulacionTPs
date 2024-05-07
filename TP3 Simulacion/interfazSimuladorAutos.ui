@@ -160,7 +160,7 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>20</number>
+     <number>0</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="auto1">
@@ -173,7 +173,7 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>30</number>
+     <number>0</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="auto2">
@@ -186,7 +186,7 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>30</number>
+     <number>0</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="auto3">
@@ -199,7 +199,7 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>15</number>
+     <number>0</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="auto4">
@@ -212,7 +212,7 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>5</number>
+     <number>0</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="semanas">
