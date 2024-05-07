@@ -75,7 +75,7 @@ def simulacion(tupla_probs):
         else:
             fila_usar = 0
             fila_no_usar = 1
-
+    return filas_guardadas
 
 def funcionBuscar(tupla_determinar, rnd):
     acumulador = 0
