@@ -37,13 +37,13 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="maximum">
      <number>100</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>30</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="tarifa1">
@@ -59,7 +59,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>35</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="tarifa2">
@@ -75,7 +75,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>40</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="tarifa3">
@@ -91,7 +91,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>25</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="comision1">
@@ -107,7 +107,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>40</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="comision2">
@@ -123,7 +123,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>60</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="compacto">
@@ -139,7 +139,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>50</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="mediano">
@@ -155,7 +155,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>35</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="lujo">
@@ -171,7 +171,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>15</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="auto0">
@@ -187,7 +187,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>20</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="auto1">
@@ -203,7 +203,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>30</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="auto2">
@@ -219,7 +219,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>30</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="auto3">
@@ -235,7 +235,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>15</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="auto4">
@@ -251,7 +251,7 @@
      <number>0</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>5</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="semanas">
@@ -566,7 +566,7 @@
         <number>1000</number>
        </property>
        <property name="value">
-        <number>0</number>
+        <number>10</number>
        </property>
       </widget>
      </item>
