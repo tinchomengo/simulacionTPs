@@ -19,14 +19,13 @@ class MainWindow(QMainWindow):
         condicional2 = self.compacto.value() +self.mediano.value()+self.lujo.value() == 100
         condicional3 = self.comision1.value() +self.comision2.value() == 100
         condicional4 = (self.tarifa1.value()) +self.tarifa2.value()+self.tarifa3.value() == 100
-        condicional5 = (self.valor_i.value() + self.valor_j.value()) <= self.semanas.value()
+        condicional5 = (self.valor_j.value()-1 + self.valor_i.value()) <= self.semanas.value()
         if(condicional1 and condicional2 and condicional3 and condicional4 and condicional5):
             print("Condiciones correctas")
-            # Estructura tupla ((probAutos), (probCategoria), (probComision), (probTarifa), probSorteo, (valor_i, valor_j), semanas)
-            tupla_probs = (((self.auto0.value(),0), (self.auto1.value(),1), (self.auto2.value(),2), (self.auto3.value(),3), (self.auto4.value(),4)), ((self.compacto.value(),"compacto"), (self.mediano.value(),"mediano"), (self.lujo.value(),"de lujo")), ((self.comision1.value(),400), (self.comision2.value(),500)), ((self.tarifa1.value(),1000), (self.tarifa2.value(),1500), (self.tarifa3.value(),2000)), ((self.probGanar.value(),"Gana el sorteo"),(100-self.probGanar.value(),"No gana el sorteo")), ((self.valor_i.value(), self.valor_j.value())), self.semanas.value())
-            datos=simulacion(tupla_probs)
+            # Estructura tupla ((probAutos), (probCategoria), (probComision), (probTarifa), probSorteo, (valor_j, valor_i), semanas)
+            tupla_probs = (((self.auto0.value(),0), (self.auto1.value(),1), (self.auto2.value(),2), (self.auto3.value(),3), (self.auto4.value(),4)), ((self.compacto.value(),"compacto"), (self.mediano.value(),"mediano"), (self.lujo.value(),"de lujo")), ((self.comision1.value(),400), (self.comision2.value(),500)), ((self.tarifa1.value(),1000), (self.tarifa2.value(),1500), (self.tarifa3.value(),2000)), ((self.probGanar.value(),"Gana el sorteo"),(100-self.probGanar.value(),"No gana el sorteo")), ((self.valor_i.value()-1, self.valor_j.value())), self.semanas.value())
+            datos = simulacion(tupla_probs)
             mostrar_excel(datos)
-
         else:
             print("Condiciones incorrectas")
 

@@ -1,5 +1,4 @@
 import random
-import copy
 def simulacion(tupla_probs):
     # Estructura tupla ((probAutos), (probCategoria), (probComisionMediano), (probComisionDeLujo), (probSorteo), (valor_i, valor_j), semanas)
 
