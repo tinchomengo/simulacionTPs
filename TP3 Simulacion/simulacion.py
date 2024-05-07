@@ -65,7 +65,7 @@ def simulacion(tupla_probs):
         fila[fila_usar][7] = round(fila[fila_usar][6]/fila[fila_usar][0],4)
         if((tupla_probs[5][1]+tupla_probs[5][0] > semana >= tupla_probs[5][0]) or semana == tupla_probs[6]-1):
             filas_guardadas.append((fila[fila_usar]))
-            print(fila[fila_usar])
+            # print(fila[fila_usar])
 
         fila[fila_no_usar] = reiniciar_fila()
 
