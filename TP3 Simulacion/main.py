@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QLineEdit
 from PyQt6.uic import loadUi
-
+from simulacion import simulacion
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -21,7 +21,8 @@ class MainWindow(QMainWindow):
         if(condicional1 and condicional2 and condicional3 and condicional4 and condicional5):
             print("Condiciones correctas")
             # Estructura tupla ((probAutos), (probCategoria), (probComision), (probTarifa), probSorteo, (valor_i, valor_j), semanas)
-            tupla_probs = (((self.auto0.value(),0), (self.auto1.value(),1), (self.auto2.value(),2), (self.auto3.value(),3), (self.auto4.value(),4)), ((self.compacto.value(),"compacto"), (self.mediano.value(),"mediano"), (self.lujo.value(),"de lujo")), ((self.comision1.value(),400), (self.comision2.value(),500)), ((self.tarifa1.value(),1000), (self.tarifa2.value(),1500), (self.tarifa3.value(),2000)), self.prob_sorteo.value(), ((self.valor_i.value(), self.valor_j.value())), self.semanas.value())
+            tupla_probs = (((self.auto0.value(),0), (self.auto1.value(),1), (self.auto2.value(),2), (self.auto3.value(),3), (self.auto4.value(),4)), ((self.compacto.value(),"compacto"), (self.mediano.value(),"mediano"), (self.lujo.value(),"de lujo")), ((self.comision1.value(),400), (self.comision2.value(),500)), ((self.tarifa1.value(),1000), (self.tarifa2.value(),1500), (self.tarifa3.value(),2000)), ((self.probGanar.value(),"Gana el sorteo"),(100-self.probGanar.value(),"No gana el sorteo")), ((self.valor_i.value(), self.valor_j.value())), self.semanas.value())
+            simulacion(tupla_probs)
         else:
             print("Condiciones incorrectas")
 
