@@ -25,7 +25,8 @@ class MainWindow(QMainWindow):
             # Estructura tupla ((probAutos), (probCategoria), (probComision), (probTarifa), probSorteo, (valor_j, valor_i), semanas)
             tupla_probs = (((self.auto0.value(),0), (self.auto1.value(),1), (self.auto2.value(),2), (self.auto3.value(),3), (self.auto4.value(),4)), ((self.compacto.value(),"compacto"), (self.mediano.value(),"mediano"), (self.lujo.value(),"de lujo")), ((self.comision1.value(),400), (self.comision2.value(),500)), ((self.tarifa1.value(),1000), (self.tarifa2.value(),1500), (self.tarifa3.value(),2000)), ((self.probGanar.value(),"Gana el sorteo"),(100-self.probGanar.value(),"No gana el sorteo")), ((self.valor_i.value()-1, self.valor_j.value())), self.semanas.value())
             datos = simulacion(tupla_probs)
-            mostrar_excel(datos)
+            mostrar_excel(datos[0],datos[1],datos[2])
+            
         else:
             print("Condiciones incorrectas")
 

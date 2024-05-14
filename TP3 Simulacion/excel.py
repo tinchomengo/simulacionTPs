@@ -1,23 +1,40 @@
-from openpyxl import Workbook
+import openpyxl
 
-def mostrar_excel(datos):
-    def flatten(lst):
-        flattened_list = []
-        for item in lst:
-            if isinstance(item, list):
-                flattened_list.extend(flatten(item))
-            elif item == "":
-                flattened_list.append("0")
+def mostrar_excel(datos,semanas,comision_promedio):
+
+    def limpiar_array_internos(lista):
+        nuevo_array = []
+        for elemento in lista:
+            if isinstance(elemento, list):
+                for sub_elemento in elemento:
+                    if isinstance(sub_elemento, list):
+                        nuevo_array.extend(sub_elemento)
+                    else:
+                        nuevo_array.append(sub_elemento)
             else:
-                flattened_list.append(str(item))
-        return flattened_list
+                nuevo_array.append(str(elemento) if isinstance(elemento, (int, float)) else elemento)
+        return nuevo_array
 
-    datos_unificados = [flatten(sublista) for sublista in datos]
+    nuevos_datos = []
+    for subarray in datos:
+        fila = []
+        for elemento in subarray:
+            if isinstance(elemento, list):
+                for valor in elemento:
+                    if isinstance(valor, list):
+                        fila.extend(valor)
+                    else:
+                        fila.append(valor)
+            else:
+                fila.append(elemento)
+        nuevos_datos.append(fila)
 
-    datos_en_lista = datos_unificados
 
-    columnas = [
+    nuevos_datos=limpiar_array_internos(nuevos_datos)
+
+    encabezados = [
         "Semana",
+
         "RndDemanda",
         "Demanda",
         "RndAuto1", 
@@ -40,17 +57,96 @@ def mostrar_excel(datos):
         "ResSorteo",
         "ComisionFila",
         "ComisionAcumulada",
+
+        "RndDemanda",
+        "Demanda",
+        "RndAuto1", 
+        "TipoAuto1",
+        "RndAuto2", 
+        "TipoAuto2",
+        "RndAuto3", 
+        "TipoAuto3",
+        "RndAuto4", 
+        "TipoAuto4",
+        "ComisionAuto1", 
+        "CantidadComision1",
+        "ComisionAuto2", 
+        "CantidadComision2",
+        "ComisionAuto3",
+        "CantidadComision3",
+        "ComisionAuto4", 
+        "CantidadComision4",
+        "RndSorteo", 
+        "ResSorteo",
+        "ComisionFila",
+        "ComisionAcumulada",
+
+        "RndDemanda",
+        "Demanda",
+        "RndAuto1", 
+        "TipoAuto1",
+        "RndAuto2", 
+        "TipoAuto2",
+        "RndAuto3", 
+        "TipoAuto3",
+        "RndAuto4", 
+        "TipoAuto4",
+        "ComisionAuto1", 
+        "CantidadComision1",
+        "ComisionAuto2", 
+        "CantidadComision2",
+        "ComisionAuto3",
+        "CantidadComision3",
+        "ComisionAuto4", 
+        "CantidadComision4",
+        "RndSorteo", 
+        "ResSorteo",
+        "ComisionFila",
+        "ComisionAcumulada",
+
+        "RndDemanda",
+        "Demanda",
+        "RndAuto1", 
+        "TipoAuto1",
+        "RndAuto2", 
+        "TipoAuto2",
+        "RndAuto3", 
+        "TipoAuto3",
+        "RndAuto4", 
+        "TipoAuto4",
+        "ComisionAuto1", 
+        "CantidadComision1",
+        "ComisionAuto2", 
+        "CantidadComision2",
+        "ComisionAuto3",
+        "CantidadComision3",
+        "ComisionAuto4", 
+        "CantidadComision4",
+        "RndSorteo", 
+        "ResSorteo",
+        "ComisionFila",
+        "ComisionAcumulada",
+
         "ComisionPromedio"
     ]
 
-    wb = Workbook()
+    wb = openpyxl.Workbook()
     hoja = wb.active
-    hoja.title = "Datos"
+    hoja.append(encabezados)
 
-    for col, encabezado in enumerate(columnas, start=1):
-        hoja.cell(row=1, column=col, value=encabezado)
+    for i, dato in enumerate(semanas, start=2):
+        hoja.cell(row=i, column=1).value = dato
 
-    for fila_data in datos_en_lista:
-        hoja.append(fila_data)
+    c = 2
+    fila = 2
+    for x in nuevos_datos:
+        hoja.cell(row=fila, column=c).value = str(x)
+        c += 1
+        if c > 89:
+            c = 2
+            fila += 1
+
+    for i, dato in enumerate(comision_promedio, start=2):
+        hoja.cell(row=i, column=90).value = dato
 
     wb.save("datos.xlsx")
