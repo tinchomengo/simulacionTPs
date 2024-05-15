@@ -70,7 +70,7 @@ def simulacion(tupla_probs):
         if((tupla_probs[5][1]+tupla_probs[5][0] > semana >= tupla_probs[5][0]) or semana == tupla_probs[6]-1):
             filas_guardadas.append((fila[fila_usar]))
             semanas_guardadas.append(semana+1)
-            comisiones_promedio_guardadas.append(calcular_comision_promedio(fila[fila_usar], semana+1))
+            comisiones_promedio_guardadas.append(calcular_comision_promedio(fila[fila_usar]))
         fila[fila_no_usar] = reiniciar_fila()
 
         if(fila_usar == 0):
@@ -101,11 +101,11 @@ def reiniciar_fila():
     return [[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0],[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0],[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0],[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0]]
 
 
-def calcular_comision_promedio(fila, semana):
+def calcular_comision_promedio(fila):
     comision_acumulada_todos = 0
     for empleado in range(4):
         comision_acumulada_todos += fila[empleado][5]
-    return round(comision_acumulada_todos/semana,4)
+    return round(comision_acumulada_todos/4,4)
     
 
 simulacion((((20, 0), (30, 1), (30, 2), (15, 3), (5, 4)), ((50, 'compacto'), (35, 'mediano'), (15, 'de lujo')), ((40, 400), (60, 500)), ((35, 1000), (40, 1500), (25, 2000)), ((30, 'Gana el sorteo'), (70, 'No gana el sorteo')), (0, 10), 100000))
