@@ -111,10 +111,7 @@ def simulacion(datos):
                     coches[prox_id].hora_fin_cobro = round(fila_nueva[1] + float(datos[6]), 4)
                     coches[prox_id].estado = "Cobrando"
                     fila_nueva[5][1] -= 1
-                    if fila_nueva[5][1]>0:
-                        fila_nueva[5][0]="Ocupado"
-                    else:
-                        fila_nueva[5][0]="Libre"
+                    fila_nueva[5][0] = "Ocupado"
                 
                 else:
                     fila_nueva[5][0]="Libre"
@@ -122,7 +119,7 @@ def simulacion(datos):
                 print(id_colas)
                 usar_prox_llegada_almacenada = True
 
-            fila_nueva[4][2] = 1 - (fila_nueva[4][1] / 8)
+            fila_nueva[4][2] =( 1 - (fila_nueva[4][1] / 8))*100
             if fila_nueva[4][1] == 8:
                     fila_nueva[4][0] = "Libre"
         fila_anterior = copy.deepcopy(fila_nueva)
