@@ -22,9 +22,9 @@ class Auto:
         return f"Auto(id={self.id}, tipo={self.tipo}, estado={self.estado}, hora_llegada={self.hora_llegada}, fin_estacionamiento={self.hora_fin_estacionamiento}, fin_cobro={self.hora_fin_cobro})"
 
 def simulacion(datos):
+    lista_coches=[]
     iteraciones_guardadas = []
     coches = []
-    fila_inicio = []
     id_colas = []
     coche_id = 0
     prox_llegada_almacenada = None
@@ -32,6 +32,7 @@ def simulacion(datos):
     contador_guardados = 0
     finalizar_simulacion = False
     primera_iteracion = True
+    coches_guardados=[]
 
     #Estructura de las filas
     #0 ["Evento"]
@@ -56,12 +57,15 @@ def simulacion(datos):
             fila_nueva = buscarProxHoraYEvento(fila_nueva, fila_anterior, coches, usar_prox_llegada_almacenada, prox_llegada_almacenada)
 
             if fila_nueva[0][0] == "Llegada":
+                
+                fila_nueva[0][0] = "Llegada A"+str(coche_id)
                 rnd_llegada = round(random.uniform(0, 0.9999), 4)
                 fila_nueva[2][1][0] = rnd_llegada
                 fila_nueva[2][1][1] = distribExp(datos[3], rnd_llegada)
                 prox_llegada_almacenada = fila_nueva[2][1][1] + fila_nueva[1]
                 usar_prox_llegada_almacenada = False
                 if fila_anterior[4][1]>0:
+
                     fila_nueva[2][0][0] = round(random.uniform(0, 0.9999), 4)
                     fila_nueva[2][0][1] = funcionBuscar(datos[5], fila_nueva[2][0][0])
 
@@ -72,15 +76,16 @@ def simulacion(datos):
                     fila_nueva[4][0] = "Ocupado"
             
                     coche = Auto(coche_id, fila_nueva[3][1], fila_nueva[1], fila_nueva[2][2],None)
-                    coche_id += 1
+                    
                     coches.append(coche)
-
+                coche_id += 1
             elif fila_nueva[0][0] == "Fin Estacionamiento":
                 #Libero un lugar en la playa de estacionamiento
                 fila_nueva[4][1] += 1
                 
                 #Busco el id del auto y calculo su fin de cobro si la zona de cobro esta libre
                 id = buscarAuto(coches, fila_nueva[1])
+                fila_nueva[0][0] = "Fin Estacionamiento A" + str(id)
                 if fila_nueva[5][0] == "Libre":
                     coches[id].hora_fin_cobro=round(fila_nueva[1]+float(datos[6]),4)
                     coches[id].estado = "Cobrando"
@@ -97,6 +102,8 @@ def simulacion(datos):
             
             elif fila_nueva[0][0] == "Fin Cobro":
                 id = buscarAutoCobro(coches, fila_nueva[1])
+                fila_nueva[0][0] = "Fin Cobro A" + str(id)
+
                 #Calculo el cobro del auto dependiendo del tipo
                 if coches[id].tipo == "Grandes":
                     fila_nueva[6][0] = round(float(500) * ((coches[id].hora_fin_estacionamiento - coches[id].hora_llegada ) / 60),4)
@@ -116,23 +123,33 @@ def simulacion(datos):
                 else:
                     fila_nueva[5][0]="Libre"
 
-                print(id_colas)
                 usar_prox_llegada_almacenada = True
 
             fila_nueva[4][2] =( 1 - (fila_nueva[4][1] / 8))*100
             if fila_nueva[4][1] == 8:
                     fila_nueva[4][0] = "Libre"
-        fila_anterior = copy.deepcopy(fila_nueva)
-        if fila_nueva[1] >= datos[0] or contador_guardados == datos[1]:
-            iteraciones_guardadas.append(fila_nueva)
+        if fila_nueva[1] > datos[0]:
+            iteraciones_guardadas.append(fila_anterior)
+            contador_guardados +=1
 
             break
         else:
-            iteraciones_guardadas.append(fila_nueva)
-            contador_guardados += 1
-    
+            if fila_nueva[1]>= datos[2] and (contador_guardados < datos[1]):
+                iteraciones_guardadas.append(fila_nueva)
+                for coche in coches:
+                    if coche.estado!="Destruido":
+                        coches_guardados+=[[coche.id,coche.tipo,coche.estado,coche.hora_llegada,coche.hora_fin_estacionamiento]]
+                    else:
+                        coches_guardados+=[[0,0,0,0,0]]
+                lista_coches.append(coches_guardados)
+                coches_guardados=[]
+                    
 
-    return iteraciones_guardadas, coches
+            
+
+                contador_guardados += 1
+        fila_anterior = copy.deepcopy(fila_nueva)
+    return iteraciones_guardadas,contador_guardados, lista_coches
 
 def funcionBuscar(tupla_determinar, rnd):
     acumulador = 0
@@ -217,3 +234,14 @@ def buscarAutoCobro(coches, finCobro):
     for i, coche in enumerate(coches):
         if coche.hora_fin_cobro== finCobro:
             return i
+        
+
+def filtrarAutos(coches,hora,filas):
+
+    fila=filas[-2]
+    
+    lista=[]
+    for coche in coches:
+        if coche.estado != "Destruido"and coche.hora_llegada<=fila[1] :
+            lista.append([coche.hora_llegada,coche.tipo,coche.estado])
+    return lista
