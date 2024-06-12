@@ -19,8 +19,10 @@ class MainWindow(QMainWindow):
         if(condicional1 and condicional2):
             tupla_datos = (self.tiempoSimulacion.value(),self.nroIteraciones.value(),self.horaGuardado.value(),self.llegada.value(),((self.pequenos.value(),"Pequeños"), (self.grandes.value(),"Grandes"), (self.utilitarios.value(),"Utilarios")), ((self.unaHoras.value(),60), (self.dosHoras.value(),120), (self.tresHoras.value(),180),((100-self.tresHoras.value()+self.unaHoras.value()+self.dosHoras.value()),240)),self.tiempoCobro.value())
             datos=simulacion(tupla_datos)
+            print("\n")
             print("Condiciones correctas")
             print("Iteraciones simuladas: ",datos[0])
+            print("\n")
             print("Todos los coches: ",datos[2])
             print("Contadores guardados:",datos[1])
         else:
