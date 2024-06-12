@@ -1,4 +1,5 @@
 import sys
+import excel
 from PyQt6.QtWidgets import *
 from PyQt6.uic import *
 from simulacion import simulacion
@@ -23,6 +24,7 @@ class MainWindow(QMainWindow):
             print("Iteraciones simuladas: ",datos[0])
             print("Todos los coches: ",datos[2])
             print("Contadores guardados:",datos[1])
+            excel.mostrar_excel(datos[0],datos[2])
         else:
             print("Condiciones incorrectas")
 
