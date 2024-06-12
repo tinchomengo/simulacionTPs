@@ -22,6 +22,8 @@ class Auto:
         return f"Auto(id={self.id}, tipo={self.tipo}, estado={self.estado}, hora_llegada={self.hora_llegada}, fin_estacionamiento={self.hora_fin_estacionamiento}, fin_cobro={self.hora_fin_cobro})"
 
 def simulacion(datos):
+    bandera_primero=True
+    id_primero=0
     lista_coches=[]
     iteraciones_guardadas = []
     coches = []
@@ -111,7 +113,10 @@ def simulacion(datos):
                     fila_nueva[6][0] = round(float(1000) * ((coches[id].hora_fin_estacionamiento - coches[id].hora_llegada ) / 60),4)
                 else:
                     fila_nueva[6][0] = round(float(300) * ((coches[id].hora_fin_estacionamiento - coches[id].hora_llegada ) / 60),4)
-                coches[id].estado = "Destruido"
+                if id_primero ==id and bandera_primero==False:
+                    coches[id].estado = "Destruidoo"
+                else:    
+                    coches[id].estado = "Destruido"
 
                 if fila_nueva[5][1] > 0:
                     prox_id = id_colas.pop(0)
@@ -140,12 +145,24 @@ def simulacion(datos):
             bandera_coche = False 
     
             for coche in coches:
-                
-                if coche.estado != "Destruido":
+                if coche.estado == "Destruidoo":
+                    coches_guardados.append([0,0,0,0,0])
+                    bandera_coche= True
+
+                elif coche.estado != "Destruido":
+                    if bandera_primero:
+                        id_primero=coche.id
+                        print(coche.id)
+                        bandera_primero=False
                     coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento])
                     bandera_coche = True
+
+                
+
                 elif bandera_coche:
                     coches_guardados.append([0,0,0,0,0])
+                
+
 
             lista_coches.append(coches_guardados)
             contador_guardados+=1

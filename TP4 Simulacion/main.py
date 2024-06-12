@@ -22,9 +22,7 @@ class MainWindow(QMainWindow):
             datos=simulacion(tupla_datos)
             print("\n")
             print("Condiciones correctas")
-            print("Iteraciones simuladas: ",datos[0])
             print("\n")
-            print("Todos los coches: ",datos[2])
             print("Contadores guardados:",datos[1])
             excel.mostrar_excel(datos[0],datos[2])
         else:
