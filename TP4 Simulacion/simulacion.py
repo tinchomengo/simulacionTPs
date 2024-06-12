@@ -134,20 +134,22 @@ def simulacion(datos):
 
             break
         else:
-            if fila_nueva[1]>= datos[2] and (contador_guardados < datos[1]):
-                iteraciones_guardadas.append(fila_nueva)
-                for coche in coches:
-                    if coche.estado!="Destruido":
-                        coches_guardados+=[[coche.id,coche.tipo,coche.estado,coche.hora_llegada,coche.hora_fin_estacionamiento]]
-                    else:
-                        coches_guardados+=[[0,0,0,0,0]]
-                lista_coches.append(coches_guardados)
-                coches_guardados=[]
-                    
+           if fila_nueva[1] >= datos[2] and contador_guardados < datos[1]:
+            iteraciones_guardadas.append(fila_nueva)
+            coches_guardados = [] 
+            bandera_coche = False 
+    
+            for coche in coches:
+                
+                if coche.estado != "Destruido":
+                    coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento])
+                    bandera_coche = True
+                elif bandera_coche:
+                    coches_guardados.append([0,0,0,0,0])
 
-            
+            lista_coches.append(coches_guardados)
+            contador_guardados+=1
 
-                contador_guardados += 1
         fila_anterior = copy.deepcopy(fila_nueva)
     return iteraciones_guardadas,contador_guardados, lista_coches
 
