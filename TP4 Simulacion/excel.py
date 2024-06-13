@@ -52,7 +52,7 @@ def mostrar_excel(datos, coches):
         "Estadia",
         "RND",
         "Proxima llegada",
-        "Fin cobro",
+        "Fin Estacionamiento",
         "RND",
         "Tipo",
         "Estado playa",

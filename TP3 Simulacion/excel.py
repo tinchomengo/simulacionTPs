@@ -57,6 +57,8 @@ def mostrar_excel(datos,semanas,comision_promedio):
         "ResSorteo",
         "ComisionFila",
         "ComisionAcumulada",
+        #        "ComisionPromedio",
+
 
         "RndDemanda",
         "Demanda",
@@ -80,6 +82,8 @@ def mostrar_excel(datos,semanas,comision_promedio):
         "ResSorteo",
         "ComisionFila",
         "ComisionAcumulada",
+        #        "ComisionPromedio",
+
 
         "RndDemanda",
         "Demanda",
@@ -103,6 +107,8 @@ def mostrar_excel(datos,semanas,comision_promedio):
         "ResSorteo",
         "ComisionFila",
         "ComisionAcumulada",
+#        "ComisionPromedio",
+
 
         "RndDemanda",
         "Demanda",
@@ -126,6 +132,8 @@ def mostrar_excel(datos,semanas,comision_promedio):
         "ResSorteo",
         "ComisionFila",
         "ComisionAcumulada",
+#        "ComisionPromedio",
+
 
         "ComisionPromedio"
     ]
@@ -143,10 +151,12 @@ def mostrar_excel(datos,semanas,comision_promedio):
         hoja.cell(row=fila, column=c).value = str(x)
         c += 1
         if c > 89:
+           #93
+
             c = 2
             fila += 1
 
     for i, dato in enumerate(comision_promedio, start=2):
         hoja.cell(row=i, column=90).value = dato
-
+#                          column=93
     wb.save("datos.xlsx")

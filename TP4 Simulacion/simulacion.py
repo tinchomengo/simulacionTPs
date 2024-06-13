@@ -45,7 +45,7 @@ def simulacion(datos):
     #5 [EstadoZonaCobro,ColaCobro],
     #6 [CobroTotal,CobroAcumulado]
 
-    fila = [["Inicio"], 0, [[0, 0], [0, 0], 0], [0, ""], ["Libre", 8, 0], ["Libre", 0], [0, 0]]
+    fila = [["Inicio"], 0, [[0, 0], [0, 0], 0], [0, ""], ["Libre", 10, 0], ["Libre", 0], [0, 0]]
     while finalizar_simulacion == False:
         fila_nueva = copy.deepcopy(fila)
         
@@ -130,12 +130,16 @@ def simulacion(datos):
 
                 usar_prox_llegada_almacenada = True
 
-            fila_nueva[4][2] =( 1 - (fila_nueva[4][1] / 8))*100
-            if fila_nueva[4][1] == 8:
+            fila_nueva[4][2] =( 1 - (fila_nueva[4][1] / 10))*100
+            if fila_nueva[4][1] == 10:
                     fila_nueva[4][0] = "Libre"
         if fila_nueva[1] > datos[0]:
-            iteraciones_guardadas.append(fila_anterior)
-            contador_guardados +=1
+            if contador_guardados < datos[1]:
+                break
+            else:
+
+                iteraciones_guardadas.append(fila_anterior)
+                contador_guardados +=1
 
             break
         else:
@@ -255,7 +259,7 @@ def buscarAutoCobro(coches, finCobro):
             return i
         
 
-def filtrarAutos(coches,hora,filas):
+def filtrarAutos(coches,filas):
 
     fila=filas[-2]
     
