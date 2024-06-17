@@ -50,9 +50,9 @@ def mostrar_excel(datos, coches):
         "Reloj",
         "RND",
         "Estadia",
+        "Fin estacionamiento",
         "RND",
         "Proxima llegada",
-        "Fin Estacionamiento",
         "RND",
         "Tipo",
         "Estado playa",
@@ -75,6 +75,10 @@ def mostrar_excel(datos, coches):
     wb = openpyxl.Workbook()
     hoja = wb.active
 
+    
+    hoja.merge_cells("C1:I1")
+    hoja["C1"] = "Auto"
+
     hoja.merge_cells("J1:K1")
     hoja["J1"] = "Playa"
 
@@ -90,7 +94,7 @@ def mostrar_excel(datos, coches):
 
         rango = f'{letra_inicial}1:{letra_final}1'
         hoja.merge_cells(rango)
-        hoja[f'{letra_inicial}1'] = f"Coche {inx}"
+        hoja[f'{letra_inicial}1'] = f"Coche Activo {inx}"
         column_coche += 5
 
     hoja.append(columnas)

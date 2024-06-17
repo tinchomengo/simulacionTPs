@@ -35,6 +35,10 @@ def simulacion(datos):
     finalizar_simulacion = False
     primera_iteracion = True
     coches_guardados=[]
+    control=True
+    listaid=[]
+    hora_actual=0
+    llegadas=0
 
     #Estructura de las filas
     #0 ["Evento"]
@@ -45,7 +49,7 @@ def simulacion(datos):
     #5 [EstadoZonaCobro,ColaCobro],
     #6 [CobroTotal,CobroAcumulado]
 
-    fila = [["Inicio"], 0, [[0, 0], [0, 0], 0], [0, ""], ["Libre", 10, 0], ["Libre", 0], [0, 0]]
+    fila = [["Inicio"], 0, [[0, 0,0], [0, 0]], [0, ""], ["Libre", 10, 0], ["Libre", 0], [0, 0]]
     while finalizar_simulacion == False:
         fila_nueva = copy.deepcopy(fila)
         
@@ -63,31 +67,31 @@ def simulacion(datos):
                 fila_nueva[0][0] = "Llegada A"+str(coche_id)
                 rnd_llegada = round(random.uniform(0, 0.9999), 4)
                 fila_nueva[2][1][0] = rnd_llegada
-                fila_nueva[2][1][1] = distribExp(datos[3], rnd_llegada)
-                prox_llegada_almacenada = fila_nueva[2][1][1] + fila_nueva[1]
+                fila_nueva[2][1][1] = round(distribExp(datos[3], rnd_llegada) + fila_nueva[1],4)
+                prox_llegada_almacenada = fila_nueva[2][1][1]
                 usar_prox_llegada_almacenada = False
                 if fila_anterior[4][1]>0:
 
                     fila_nueva[2][0][0] = round(random.uniform(0, 0.9999), 4)
                     fila_nueva[2][0][1] = funcionBuscar(datos[5], fila_nueva[2][0][0])
 
-                    fila_nueva[2][2] = round(fila_nueva[1] + fila_nueva[2][0][1],4)
+                    fila_nueva[2][0][2] = round(fila_nueva[1] + fila_nueva[2][0][1],4)
                     fila_nueva[3][0] = round(random.uniform(0, 0.9999), 4)
                     fila_nueva[3][1] = funcionBuscar(datos[4], fila_nueva[3][0])
                     fila_nueva[4][1] -= 1
                     fila_nueva[4][0] = "Ocupado"
             
-                    coche = Auto(coche_id, fila_nueva[3][1], fila_nueva[1], fila_nueva[2][2],None)
-                    
+                    coche = Auto(coche_id, fila_nueva[3][1], fila_nueva[1], fila_nueva[2][0][2],None)
+
                     coches.append(coche)
-                coche_id += 1
+                coche_id +=1
             elif fila_nueva[0][0] == "Fin Estacionamiento":
                 #Libero un lugar en la playa de estacionamiento
                 fila_nueva[4][1] += 1
                 
                 #Busco el id del auto y calculo su fin de cobro si la zona de cobro esta libre
-                id = buscarAuto(coches, fila_nueva[1])
-                fila_nueva[0][0] = "Fin Estacionamiento A" + str(id)
+                id,i = buscarAuto(coches, fila_nueva[1])
+                fila_nueva[0][0] = "Fin Estacionamiento A" + str(i)
                 if fila_nueva[5][0] == "Libre":
                     coches[id].hora_fin_cobro=round(fila_nueva[1]+float(datos[6]),4)
                     coches[id].estado = "Cobrando"
@@ -103,8 +107,8 @@ def simulacion(datos):
                 usar_prox_llegada_almacenada = True
             
             elif fila_nueva[0][0] == "Fin Cobro":
-                id = buscarAutoCobro(coches, fila_nueva[1])
-                fila_nueva[0][0] = "Fin Cobro A" + str(id)
+                id,i = buscarAutoCobro(coches, fila_nueva[1])
+                fila_nueva[0][0] = "Fin Cobro A" + str(i)
 
                 #Calculo el cobro del auto dependiendo del tipo
                 if coches[id].tipo == "Grandes":
@@ -113,8 +117,8 @@ def simulacion(datos):
                     fila_nueva[6][0] = round(float(1000) * ((coches[id].hora_fin_estacionamiento - coches[id].hora_llegada ) / 60),4)
                 else:
                     fila_nueva[6][0] = round(float(300) * ((coches[id].hora_fin_estacionamiento - coches[id].hora_llegada ) / 60),4)
-                if id_primero ==id and bandera_primero==False:
-                    coches[id].estado = "Destruidoo"
+                if id_primero ==coches[id].id and bandera_primero==False:
+                    coches[id].estado = "Destruido"
                 else:    
                     coches[id].estado = "Destruido"
 
@@ -147,25 +151,32 @@ def simulacion(datos):
             iteraciones_guardadas.append(fila_nueva)
             coches_guardados = [] 
             bandera_coche = False 
+            if control:
+                hora_actual=fila_nueva[1]
+            control=False
     
             for coche in coches:
-                if coche.estado == "Destruidoo":
-                    coches_guardados.append([0,0,0,0,0])
+                if coche.estado == "Destruido" and coche.id==id_primero and not bandera_primero:
+                    
+                    print(coche)
+                    coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento])
                     bandera_coche= True
+                    
 
                 elif coche.estado != "Destruido":
                     if bandera_primero:
                         id_primero=coche.id
-                        print(coche.id)
                         bandera_primero=False
                     coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento])
                     bandera_coche = True
+                    listaid.append(coche.id)
 
-                
-
-                elif bandera_coche:
-                    coches_guardados.append([0,0,0,0,0])
-                
+                else:
+                    if bandera_coche:
+                        if coche.id  not in listaid:
+                            pass
+                        else:
+                            coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento])                
 
 
             lista_coches.append(coches_guardados)
@@ -194,7 +205,7 @@ def distribExp(tupla_llegada, rnd):
 def buscarProxHoraYEvento(fila, filaAnterior, coches, bandera, hora_almacenada):
     #Primera Iteracion
     if filaAnterior[0][0] == "Inicio":
-        fila[1] = filaAnterior[2][1][1] + filaAnterior[1]
+        fila[1] = filaAnterior[2][1][1] 
         fila[0][0] = "Llegada"
         fila[4][1] = filaAnterior[4][1]
     else:
@@ -207,7 +218,7 @@ def buscarProxHoraYEvento(fila, filaAnterior, coches, bandera, hora_almacenada):
             min_hora_llegada = hora_almacenada
 
         else:
-            min_hora_llegada = filaAnterior[2][1][1] + filaAnterior[1]
+            min_hora_llegada = filaAnterior[2][1][1] 
 
         for coche in coches:
             if coche.hora_fin_estacionamiento > reloj_actual:
@@ -251,20 +262,20 @@ def buscarProxHoraYEvento(fila, filaAnterior, coches, bandera, hora_almacenada):
 def buscarAuto(coches, finEstacionamiento):
     for i, coche in enumerate(coches):
         if coche.hora_fin_estacionamiento == finEstacionamiento:
-            return i
+            return i,coche.id
 
 def buscarAutoCobro(coches, finCobro):
     for i, coche in enumerate(coches):
         if coche.hora_fin_cobro== finCobro:
-            return i
+            return i,coche.id
         
 
 def filtrarAutos(coches,filas):
 
     fila=filas[-2]
-    
+    8
     lista=[]
     for coche in coches:
-        if coche.estado != "Destruido"and coche.hora_llegada<=fila[1] :
+        if coche.estado != "Destruido" and coche.hora_llegada<=fila[1] :
             lista.append([coche.hora_llegada,coche.tipo,coche.estado])
     return lista
