@@ -24,7 +24,6 @@ class MainWindow(QMainWindow):
             print("\n")
             print("Condiciones correctas")
             print("\n")
-            print("Contadores guardados:",datos[1])
             excel.mostrar_excel(datos[0],datos[2])
         else:
             print("Condiciones incorrectas")

@@ -158,7 +158,6 @@ def simulacion(datos):
             for coche in coches:
                 if coche.estado == "Destruido" and coche.id==id_primero and not bandera_primero:
                     
-                    print(coche)
                     coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento])
                     bandera_coche= True
                     
