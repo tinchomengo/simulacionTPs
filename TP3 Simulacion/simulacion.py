@@ -16,16 +16,18 @@ def simulacion(tupla_probs):
 
     #fila = [[[[0, 0], [[0, ""], [0, ""], [0, ""], [0, ""]], [[0, 0], [0, 0], [0, 0], [0, 0]], [0, ""], 0, 0, 0] for _ in range(4)] for _ in range(2)]
     fila = [[[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0],[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0],[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0],[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0]],[[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0],[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0],[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0],[[0,0],[[0,""],[0,""],[0,""],[0,""]],[[0,0],[0,0],[0,0],[0,0]],[0,""],0,0]]]
+    matriz_sorteo = [False,False,False,False]
     fila_usar = 0
     fila_no_usar = 1
-    acumulador_vendidos = 0
-    ganada = False
+    bandera_4_vendidos = False
     for semana in range(tupla_probs[6]):
         for empleado in range(4):
             #Determinar Demanda
             fila[fila_usar][empleado][0][0] = round(random.uniform(0,0.9999),4)
-            fila[fila_usar][empleado][0][1] = funcionBuscar(tupla_probs[0], fila[fila_usar][empleado][0][0])
-            acumulador_vendidos += fila[fila_usar][empleado][0][1]
+            demanda = funcionBuscar(tupla_probs[0], fila[fila_usar][empleado][0][0])
+            fila[fila_usar][empleado][0][1] = demanda
+            if(demanda == 4):
+                matriz_sorteo[empleado] = True
             #Determinar autos y comisiones
             if(fila[fila_usar][empleado][0][1]>0):
                 for i in range(fila[fila_usar][empleado][0][1]): #Estoy utilizando la demanda solicitada para recorrer y cambiar el array de autos y comisiones
@@ -51,16 +53,15 @@ def simulacion(tupla_probs):
                 fila[fila_usar][empleado][4] += fila[fila_usar][empleado][2][i][1]
 
             # Si es una cuarta semana, se realiza el sorteo      
-            if((semana+1)%4 == 0) and ganada == False:
-                if(acumulador_vendidos >=4):
+            if((semana+1)%4 == 0):
+                if(matriz_sorteo[empleado] == True):
                     fila[fila_usar][empleado][3][0] = round(random.uniform(0,0.9999),4)
                     fila[fila_usar][empleado][3][1] = funcionBuscar(tupla_probs[4], fila[fila_usar][empleado][3][0])
                     if(fila[fila_usar][empleado][3][1] == "Gana el sorteo"):
-                        ganada = True
                         fila[fila_usar][empleado][4] += 5000
+                    matriz_sorteo[empleado] = False
                 else:
                     fila[fila_usar][empleado][3][1] = "No aplica"
-                acumulador_vendidos = 0
 
             #Comision Acumulado
             fila[fila_usar][empleado][5] = (fila[fila_no_usar][empleado][5] + fila[fila_usar][empleado][4])
@@ -80,7 +81,7 @@ def simulacion(tupla_probs):
         else:
             fila_usar = 0
             fila_no_usar = 1
-        ganada = False
+        
     
     return filas_guardadas, semanas_guardadas, comisiones_promedio_guardadas
 
