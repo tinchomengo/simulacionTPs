@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>559</width>
+    <height>685</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QDoubleSpinBox" name="tiempoSimulacion">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <double>1.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>9999999.900000000372529</double>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>181</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Tiempo de simulacion (Minutos)</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>90</y>
+      <width>181</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Nro Iteraciones a mostrar (i)</string>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="horaGuardado">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>110</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <double>9999999.900000000372529</double>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>90</y>
+      <width>181</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>A partir de la hora (Minutos) (J)</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="nroIteraciones">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>110</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>100000</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>170</y>
+      <width>171</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Indice entre llegadas (Minutos)</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="llegada">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>190</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>999</number>
+    </property>
+    <property name="value">
+     <number>13</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>260</y>
+      <width>241</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Distribucion de probabilidad de Automoviles</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="pequenos">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>310</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>45</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>290</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pequeños</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="grandes">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>310</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>25</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>290</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Utilitarios</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="utilitarios">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>310</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>30</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>290</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Grandes</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="dosHoras">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>430</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>30</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>410</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>3 Horas</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="unaHoras">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>430</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>50</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>410</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>2 Horas</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>410</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>1 Hora</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="tresHoras">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>430</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>15</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_12">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>380</y>
+      <width>261</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Distribucion de probabilidad de tiempo en playa</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>500</y>
+      <width>151</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Tiempo de cobro (Minutos)</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="tiempoCobro">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>520</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>2</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ejecutar">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>600</y>
+      <width>201</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ejecutar</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
