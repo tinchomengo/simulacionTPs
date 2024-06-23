@@ -81,7 +81,7 @@ def simulacion(datos):
                     fila_nueva[2][2][0] = round(random.uniform(0, 0.9999), 4)
                     fila_nueva[2][2][1] =round(distribUnif(datos[6],datos[7],fila_nueva[2][2][0]),4)
                                                     #C                 , Z      , W       , h
-                    fila_nueva[2][2][2] = calcularRk(datos[6],fila_nueva[2][2][1],datos[8],datos[9],datos[10])
+                    fila_nueva[2][2][2] = calcularRk(fila_nueva[2][2][1],datos[8],datos[9],datos[10])
                     fila_nueva[3][0] = round(random.uniform(0, 0.9999), 4)
                     fila_nueva[3][1] = funcionBuscar(datos[4], fila_nueva[3][0])
                     fila_nueva[4][1] -= 1
@@ -194,7 +194,7 @@ def simulacion(datos):
 
         fila_anterior = copy.deepcopy(fila_nueva)
     rkExcel=[]
-    rkExcel=calcularRkMax(datos[6],datos[7],datos[8],datos[9],datos[10])
+    rkExcel=calcularRkMax(datos[7],datos[8],datos[9],datos[10])
     return iteraciones_guardadas,contador_guardados, lista_coches,rkExcel
 
 def funcionBuscar(tupla_determinar, rnd):
@@ -284,7 +284,7 @@ def buscarAutoCobro(coches, finCobro):
 def distribUnif(a,b,rnd):
     return a+rnd*(b-a)
 
-def calcularRk(a,valorC,z,w,h):
+def calcularRk(valorC,z,w,h):
     rk_guardado=[]
     primVez=True
     tant=0
@@ -299,7 +299,7 @@ def calcularRk(a,valorC,z,w,h):
     #7 - 5 + k3
     #8 - k4
     #9 - Ci+1
-    iRK= [0,a,0,0,0,0,0,0,0,0]
+    iRK= [0,1,0,0,0,0,0,0,0,0]
 
     while iRK[9]<valorC:
         if primVez:
@@ -333,7 +333,7 @@ def calcularRk(a,valorC,z,w,h):
     
 
 
-def calcularRkMax(a,b,z,w,h):
+def calcularRkMax(b,z,w,h):
     rk_guardado=[]
     primVez=True
     tant=0
@@ -348,7 +348,7 @@ def calcularRkMax(a,b,z,w,h):
     #7 - 5 + k3
     #8 - k4
     #9 - Ci+1
-    iRK= [0,a,0,0,0,0,0,0,0,0]
+    iRK= [0,1,0,0,0,0,0,0,0,0]
     while iRK[9]<b:
         if primVez:
             iRK[2]=h*((z)*math.log(iRK[1]+w))
