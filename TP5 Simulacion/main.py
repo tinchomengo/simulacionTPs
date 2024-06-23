@@ -18,14 +18,13 @@ class MainWindow(QMainWindow):
         condicional1 = self.pequenos.value() +self.grandes.value()+self.utilitarios.value() == 100
         condicional2 = self.unaHoras.value() +self.dosHoras.value()+self.tresHoras.value() <= 100
         condicional3 = self.tiempoSimulacion.value() > self.horaGuardado.value()
-        condicional4 = self.unifA < self.unifB
-        if(condicional1 and condicional2 and condicional3 and condicional4):
+        if(condicional1 and condicional2 and condicional3):
             tupla_datos = (self.tiempoSimulacion.value(),self.nroIteraciones.value(),self.horaGuardado.value(),self.llegada.value(),((self.pequenos.value(),"Pequeños"), (self.grandes.value(),"Grandes"), (self.utilitarios.value(),"Utilarios")), ((self.unaHoras.value(),60), (self.dosHoras.value(),120), (self.tresHoras.value(),180),((100-self.tresHoras.value()+self.unaHoras.value()+self.dosHoras.value()),240)),self.unifA.value(),self.unifB.value(),self.rkZ.value(),self.rkW.value(),self.rkh.value())
             datos=simulacion(tupla_datos)
             print("\n")
             print("Condiciones correctas")
             print("\n")
-            excel.mostrar_excel(datos[0],datos[2])
+            excel.mostrar_excel(datos[0],datos[2],datos[3])
         else:
             print("Condiciones incorrectas")
 

@@ -7,19 +7,24 @@ import copy
     # 3  - llegada
     # 4  - prob Tipo
     # 5  - prob unaHoras
-    # 6 - tiempo Cobro
+    # 6 - unif A
+    # 7 - unif B
+    # 8 - rkZ
+    # 9 - rkW
+    # 10 - rk h
 
 class Auto:
-    def __init__(self, id, tipo, hora_llegada,fin_estacionamiento, fin_cobro):
+    def __init__(self, id, tipo, hora_llegada,fin_estacionamiento,hora_cobro, fin_cobro):
         self.id = id
         self.tipo = tipo
         self.estado = "Estacionado"
         self.hora_llegada = hora_llegada
         self.hora_fin_estacionamiento = fin_estacionamiento
+        self.tiempo_cobro= hora_cobro
         self.hora_fin_cobro = fin_cobro
 
     def __repr__(self):
-        return f"Auto(id={self.id}, tipo={self.tipo}, estado={self.estado}, hora_llegada={self.hora_llegada}, fin_estacionamiento={self.hora_fin_estacionamiento}, fin_cobro={self.hora_fin_cobro})"
+        return f"Auto(id={self.id}, tipo={self.tipo}, estado={self.estado}, hora_llegada={self.hora_llegada}, fin_estacionamiento={self.hora_fin_estacionamiento},hora_cobro={self.tiempo_cobro}, fin_cobro={self.hora_fin_cobro})"
 
 def simulacion(datos):
     bandera_primero=True
@@ -40,13 +45,13 @@ def simulacion(datos):
     #Estructura de las filas
     #0 ["Evento"]
     #1 [Reloj (Minutos)]
-    #2 [[RndEstadia,Estadia],[RndProxLlegada,ProxLlegada],[FinCobro]],
+    #2 [[RndEstadia,Estadia, FinEstacionamiento],[RndProxLlegada,ProxLlegada],[rndC,ValorC, TiempoCobro]],
     #3 [RndAuto1,"tipo"],
     #4 [EstadoPlaya, CapacidadPlaya,PorcentajeUtilizacion],
     #5 [EstadoZonaCobro,ColaCobro],
     #6 [CobroTotal,CobroAcumulado]
 
-    fila = [["Inicio"], 0, [[0, 0,0], [0, 0]], [0, ""], ["Libre", 10, 0], ["Libre", 0], [0, 0]]
+    fila = [["Inicio"], 0, [[0, 0,0], [0, 0],[0,0,0]], [0, ""], ["Libre", 10, 0], ["Libre", 0], [0, 0]]
     while finalizar_simulacion == False:
         fila_nueva = copy.deepcopy(fila)
         
@@ -73,11 +78,15 @@ def simulacion(datos):
                     fila_nueva[2][0][1] = funcionBuscar(datos[5], fila_nueva[2][0][0])
 
                     fila_nueva[2][0][2] = round(fila_nueva[1] + fila_nueva[2][0][1],4)
+                    fila_nueva[2][2][0] = round(random.uniform(0, 0.9999), 4)
+                    fila_nueva[2][2][1] =round(distribUnif(datos[6],datos[7],fila_nueva[2][2][0]),4)
+                                                    #C                 , Z      , W       , h
+                    fila_nueva[2][2][2] = calcularRk(datos[6],fila_nueva[2][2][1],datos[8],datos[9],datos[10])
                     fila_nueva[3][0] = round(random.uniform(0, 0.9999), 4)
                     fila_nueva[3][1] = funcionBuscar(datos[4], fila_nueva[3][0])
                     fila_nueva[4][1] -= 1
             
-                    coche = Auto(coche_id, fila_nueva[3][1], fila_nueva[1], fila_nueva[2][0][2],None)
+                    coche = Auto(coche_id, fila_nueva[3][1], fila_nueva[1], fila_nueva[2][0][2],fila_nueva[2][2][2],None)
 
                     coches.append(coche)
                 if fila_nueva[4][1]>0:
@@ -98,7 +107,7 @@ def simulacion(datos):
                 id,i = buscarAuto(coches, fila_nueva[1])
                 fila_nueva[0][0] = "Fin Estacionamiento A" + str(i)
                 if fila_nueva[5][0] == "Libre":
-                    coches[id].hora_fin_cobro=round(fila_nueva[1]+float(datos[6]),4)
+                    coches[id].hora_fin_cobro=round((fila_nueva[1]+coches[id].tiempo_cobro),4)
                     coches[id].estado = "Cobrando"
                     fila_nueva[5][0] = "Ocupado"
                 #Si no, lo agrego a la cola
@@ -129,7 +138,7 @@ def simulacion(datos):
 
                 if fila_nueva[5][1] > 0:
                     prox_id = id_colas.pop(0)
-                    coches[prox_id].hora_fin_cobro = round(fila_nueva[1] + float(datos[6]), 4)
+                    coches[prox_id].hora_fin_cobro = round(fila_nueva[1]+coches[prox_id].tiempo_cobro, 4)
                     coches[prox_id].estado = "Cobrando"
                     fila_nueva[5][1] -= 1
                     fila_nueva[5][0] = "Ocupado"
@@ -160,7 +169,7 @@ def simulacion(datos):
             for coche in coches:
                 if coche.estado == "Destruido" and coche.id==id_primero and not bandera_primero:
                     
-                    coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento])
+                    coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento,coche.tiempo_cobro])
                     bandera_coche= True
                     
 
@@ -168,7 +177,7 @@ def simulacion(datos):
                     if bandera_primero:
                         id_primero=coche.id
                         bandera_primero=False
-                    coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento])
+                    coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento,coche.tiempo_cobro])
                     bandera_coche = True
                     listaid.append(coche.id)
 
@@ -177,14 +186,16 @@ def simulacion(datos):
                         if coche.id  not in listaid:
                             pass
                         else:
-                            coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento])                
+                            coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento,coche.tiempo_cobro])                
 
 
             lista_coches.append(coches_guardados)
             contador_guardados+=1
 
         fila_anterior = copy.deepcopy(fila_nueva)
-    return iteraciones_guardadas,contador_guardados, lista_coches
+    rkExcel=[]
+    rkExcel=calcularRkMax(datos[6],datos[7],datos[8],datos[9],datos[10])
+    return iteraciones_guardadas,contador_guardados, lista_coches,rkExcel
 
 def funcionBuscar(tupla_determinar, rnd):
     acumulador = 0
@@ -270,3 +281,103 @@ def buscarAutoCobro(coches, finCobro):
         if coche.hora_fin_cobro== finCobro:
             return i,coche.id
         
+def distribUnif(a,b,rnd):
+    return a+rnd*(b-a)
+
+def calcularRk(a,valorC,z,w,h):
+    rk_guardado=[]
+    primVez=True
+    tant=0
+    cant=0
+    #0 - t
+    #1 - C
+    #2 - k1
+    #3 - C + k1/2
+    #4 - k2
+    #5 - 3 + K2/2
+    #6 - k3
+    #7 - 5 + k3
+    #8 - k4
+    #9 - Ci+1
+    iRK= [0,a,0,0,0,0,0,0,0,0]
+
+    while iRK[9]<valorC:
+        if primVez:
+            iRK[2]=h*((z)*math.log(iRK[1]+w))
+            iRK[3]=iRK[1]+(iRK[2]/2)
+            iRK[4]= h*((z)*math.log(iRK[3]+w))
+            iRK[5]= iRK[3]+(iRK[4]/2)
+            iRK[6]= h*((z)*math.log(iRK[5]+w))
+            iRK[7]=iRK[3]+(iRK[6])
+            iRK[8]=h*((z)*math.log(iRK[7]+w))
+            iRK[9]=iRK[1]+ 1/6*(iRK[2]+2*iRK[4]+2*iRK[6]+iRK[8])
+            rk_guardado.append(iRK)
+            primVez=False
+            tant=iRK[0]
+            cant=iRK[9]
+        else:
+            iRK[0]=tant+h
+            iRK[1]=cant
+            iRK[2]=h*((z)*math.log(iRK[1]+w))
+            iRK[3]=iRK[1]+(iRK[2]/2)
+            iRK[4]= h*((z)*math.log(iRK[3]+w))
+            iRK[5]= iRK[3]+(iRK[4]/2)
+            iRK[6]= h*((z)*math.log(iRK[5]+w))
+            iRK[7]=iRK[3]+(iRK[6])
+            iRK[8]=h*((z)*math.log(iRK[7]+w))
+            iRK[9]=iRK[1]+ 1/6*(iRK[2]+2*iRK[4]+2*iRK[6]+iRK[8])
+            rk_guardado.append(iRK)
+            tant=iRK[0]
+            cant=iRK[9]
+    return (iRK[0]+h)    
+    
+
+
+def calcularRkMax(a,b,z,w,h):
+    rk_guardado=[]
+    primVez=True
+    tant=0
+    cant=0
+    #0 - t
+    #1 - C
+    #2 - k1
+    #3 - C + k1/2
+    #4 - k2
+    #5 - 3 + K2/2
+    #6 - k3
+    #7 - 5 + k3
+    #8 - k4
+    #9 - Ci+1
+    iRK= [0,a,0,0,0,0,0,0,0,0]
+    while iRK[9]<b:
+        if primVez:
+            iRK[2]=h*((z)*math.log(iRK[1]+w))
+            iRK[3]=iRK[1]+(iRK[2]/2)
+            iRK[4]= h*((z)*math.log(iRK[3]+w))
+            iRK[5]= iRK[3]+(iRK[4]/2)
+            iRK[6]= h*((z)*math.log(iRK[5]+w))
+            iRK[7]=iRK[3]+(iRK[6])
+            iRK[8]=h*((z)*math.log(iRK[7]+w))
+            iRK[9]=iRK[1]+ 1/6*(iRK[2]+2*iRK[4]+2*iRK[6]+iRK[8])
+            rk_guardado.append(iRK[:])
+            primVez=False
+            tant=iRK[0]
+            cant=iRK[9]
+        else:
+            iRK[0]=tant+h
+            iRK[1]=cant
+            iRK[2]=h*((z)*math.log(iRK[1]+w))
+            iRK[3]=iRK[1]+(iRK[2]/2)
+            iRK[4]= h*((z)*math.log(iRK[3]+w))
+            iRK[5]= iRK[3]+(iRK[4]/2)
+            iRK[6]= h*((z)*math.log(iRK[5]+w))
+            iRK[7]=iRK[3]+(iRK[6])
+            iRK[8]=h*((z)*math.log(iRK[7]+w))
+            iRK[9]=iRK[1]+ 1/6*(iRK[2]+2*iRK[4]+2*iRK[6]+iRK[8])
+            rk_guardado.append(iRK[:])
+            tant=iRK[0]
+            cant=iRK[9]
+    return (rk_guardado)    
+    
+
+
