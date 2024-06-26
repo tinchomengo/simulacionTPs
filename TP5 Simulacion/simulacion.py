@@ -14,14 +14,14 @@ import copy
     # 10 - rk h
 
 class Auto:
-    def __init__(self, id, tipo, hora_llegada,fin_estacionamiento,hora_cobro, fin_cobro):
+    def __init__(self, id, tipo, hora_llegada,fin_estacionamiento,hora_cobro, hora_fin_cobro):
         self.id = id
         self.tipo = tipo
         self.estado = "Estacionado"
         self.hora_llegada = hora_llegada
         self.hora_fin_estacionamiento = fin_estacionamiento
         self.tiempo_cobro= hora_cobro
-        self.hora_fin_cobro = fin_cobro
+        self.hora_fin_cobro = hora_fin_cobro
 
     def __repr__(self):
         return f"Auto(id={self.id}, tipo={self.tipo}, estado={self.estado}, hora_llegada={self.hora_llegada}, fin_estacionamiento={self.hora_fin_estacionamiento},hora_cobro={self.tiempo_cobro}, fin_cobro={self.hora_fin_cobro})"
@@ -78,15 +78,12 @@ def simulacion(datos):
                     fila_nueva[2][0][1] = funcionBuscar(datos[5], fila_nueva[2][0][0])
 
                     fila_nueva[2][0][2] = round(fila_nueva[1] + fila_nueva[2][0][1],4)
-                    fila_nueva[2][2][0] = round(random.uniform(0, 0.9999), 4)
-                    fila_nueva[2][2][1] =round(distribUnif(datos[6],datos[7],fila_nueva[2][2][0]),4)
-                                                    #C                 , Z      , W       , h
-                    fila_nueva[2][2][2] = calcularRk(fila_nueva[2][2][1],datos[8],datos[9],datos[10])
+                   
                     fila_nueva[3][0] = round(random.uniform(0, 0.9999), 4)
                     fila_nueva[3][1] = funcionBuscar(datos[4], fila_nueva[3][0])
                     fila_nueva[4][1] -= 1
             
-                    coche = Auto(coche_id, fila_nueva[3][1], fila_nueva[1], fila_nueva[2][0][2],fila_nueva[2][2][2],None)
+                    coche = Auto(coche_id, fila_nueva[3][1], fila_nueva[1], fila_nueva[2][0][2],None,None)
 
                     coches.append(coche)
                 if fila_nueva[4][1]>0:
@@ -107,6 +104,11 @@ def simulacion(datos):
                 id,i = buscarAuto(coches, fila_nueva[1])
                 fila_nueva[0][0] = "Fin Estacionamiento A" + str(i)
                 if fila_nueva[5][0] == "Libre":
+                    fila_nueva[2][2][0] = round(random.uniform(0, 0.9999), 4)
+                    fila_nueva[2][2][1] =round(distribUnif(datos[6],datos[7],fila_nueva[2][2][0]),4)
+                                                    #C                 , Z      , W       , h
+                    fila_nueva[2][2][2] = round(calcularRk(fila_nueva[2][2][1],datos[8],datos[9],datos[10]),4)
+                    coches[id].tiempo_cobro= fila_nueva[2][2][2]
                     coches[id].hora_fin_cobro=round((fila_nueva[1]+coches[id].tiempo_cobro),4)
                     coches[id].estado = "Cobrando"
                     fila_nueva[5][0] = "Ocupado"
@@ -138,6 +140,11 @@ def simulacion(datos):
 
                 if fila_nueva[5][1] > 0:
                     prox_id = id_colas.pop(0)
+                    fila_nueva[2][2][0] = round(random.uniform(0, 0.9999), 4)
+                    fila_nueva[2][2][1] =round(distribUnif(datos[6],datos[7],fila_nueva[2][2][0]),4)
+                                                    #C                 , Z      , W       , h
+                    fila_nueva[2][2][2] = round(calcularRk(fila_nueva[2][2][1],datos[8],datos[9],datos[10]),4)
+                    coches[prox_id].tiempo_cobro= fila_nueva[2][2][2]
                     coches[prox_id].hora_fin_cobro = round(fila_nueva[1]+coches[prox_id].tiempo_cobro, 4)
                     coches[prox_id].estado = "Cobrando"
                     fila_nueva[5][1] -= 1
@@ -169,7 +176,7 @@ def simulacion(datos):
             for coche in coches:
                 if coche.estado == "Destruido" and coche.id==id_primero and not bandera_primero:
                     
-                    coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento,coche.tiempo_cobro])
+                    coches_guardados.append([0,0,0,0,0,0])
                     bandera_coche= True
                     
 
@@ -186,7 +193,7 @@ def simulacion(datos):
                         if coche.id  not in listaid:
                             pass
                         else:
-                            coches_guardados.append([coche.id, coche.tipo, coche.estado, coche.hora_llegada, coche.hora_fin_estacionamiento,coche.tiempo_cobro])                
+                            coches_guardados.append([0,0,0,0,0,0])                
 
 
             lista_coches.append(coches_guardados)
