@@ -113,26 +113,19 @@ def mostrar_excel(datos, coches,rk):
     encabezados_rk = ["t", "C", "k1", "C+k1/2", "k2", "C+k2/2", "k3", "C+k3", "k4", "Ci+1"]
     hoja_rk.append(encabezados_rk)
 
-    # Añadir los datos de Runge-Kutta con redondeo a 4 decimales
     for fila_rk in rk:
         fila_redondeada = [round(valor, 4) for valor in fila_rk]
         hoja_rk.append(fila_redondeada)
-
-    # Añadir los datos de Runge-Kutta
-    for fila_rk in rk:
-        hoja_rk.append(fila_rk)
 
     # Dar formato a las celdas de encabezado de Runge-Kutta
     for col in range(1, len(encabezados_rk) + 1):
         celda = hoja_rk.cell(row=1, column=col)
         celda.alignment = Alignment(horizontal='center')
         celda.font = Font(bold=True)
+
     # Formatear las celdas para mostrar 4 decimales
     for row in hoja_rk.iter_rows(min_row=2, min_col=1, max_col=len(encabezados_rk)):
         for celda in row:
             celda.number_format = '0.0000'
-
-
-
 
     wb.save("datos.xlsx")

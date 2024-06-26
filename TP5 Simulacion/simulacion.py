@@ -315,7 +315,7 @@ def calcularRk(valorC,z,w,h):
             iRK[4]= h*((z)*math.log(iRK[3]+w))
             iRK[5]= iRK[3]+(iRK[4]/2)
             iRK[6]= h*((z)*math.log(iRK[5]+w))
-            iRK[7]=iRK[3]+(iRK[6])
+            iRK[7]=iRK[5]+(iRK[6])
             iRK[8]=h*((z)*math.log(iRK[7]+w))
             iRK[9]=iRK[1]+ 1/6*(iRK[2]+2*iRK[4]+2*iRK[6]+iRK[8])
             rk_guardado.append(iRK)
@@ -330,7 +330,7 @@ def calcularRk(valorC,z,w,h):
             iRK[4]= h*((z)*math.log(iRK[3]+w))
             iRK[5]= iRK[3]+(iRK[4]/2)
             iRK[6]= h*((z)*math.log(iRK[5]+w))
-            iRK[7]=iRK[3]+(iRK[6])
+            iRK[7]=iRK[5]+(iRK[6])
             iRK[8]=h*((z)*math.log(iRK[7]+w))
             iRK[9]=iRK[1]+ 1/6*(iRK[2]+2*iRK[4]+2*iRK[6]+iRK[8])
             rk_guardado.append(iRK)
@@ -340,11 +340,12 @@ def calcularRk(valorC,z,w,h):
     
 
 
-def calcularRkMax(b,z,w,h):
-    rk_guardado=[]
-    primVez=True
-    tant=0
-    cant=0
+def calcularRkMax(b, z, w, h):
+    rk_guardado = []
+    primVez = True
+    tant = 0
+    cant = 0
+    cond = True
     #0 - t
     #1 - C
     #2 - k1
@@ -355,36 +356,35 @@ def calcularRkMax(b,z,w,h):
     #7 - 5 + k3
     #8 - k4
     #9 - Ci+1
-    iRK= [0,1,0,0,0,0,0,0,0,0]
-    while iRK[9]<b:
+    iRK = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+    while cond:
         if primVez:
-            iRK[2]=h*((z)*math.log(iRK[1]+w))
-            iRK[3]=iRK[1]+(iRK[2]/2)
-            iRK[4]= h*((z)*math.log(iRK[3]+w))
-            iRK[5]= iRK[3]+(iRK[4]/2)
-            iRK[6]= h*((z)*math.log(iRK[5]+w))
-            iRK[7]=iRK[3]+(iRK[6])
-            iRK[8]=h*((z)*math.log(iRK[7]+w))
-            iRK[9]=iRK[1]+ 1/6*(iRK[2]+2*iRK[4]+2*iRK[6]+iRK[8])
+            iRK[2] = h * ((z) * math.log(iRK[1] + w))
+            iRK[3] = iRK[1] + (iRK[2] / 2)
+            iRK[4] = h * ((z) * math.log(iRK[3] + w))
+            iRK[5] = iRK[3] + (iRK[4] / 2)
+            iRK[6] = h * ((z) * math.log(iRK[5] + w))
+            iRK[7] = iRK[5] + (iRK[6])
+            iRK[8] = h * ((z) * math.log(iRK[7] + w))
+            iRK[9] = iRK[1] + 1 / 6 * (iRK[2] + 2 * iRK[4] + 2 * iRK[6] + iRK[8])
             rk_guardado.append(iRK[:])
-            primVez=False
-            tant=iRK[0]
-            cant=iRK[9]
+            primVez = False
+            tant = iRK[0]
+            cant = iRK[9]
         else:
-            iRK[0]=tant+h
-            iRK[1]=cant
-            iRK[2]=h*((z)*math.log(iRK[1]+w))
-            iRK[3]=iRK[1]+(iRK[2]/2)
-            iRK[4]= h*((z)*math.log(iRK[3]+w))
-            iRK[5]= iRK[3]+(iRK[4]/2)
-            iRK[6]= h*((z)*math.log(iRK[5]+w))
-            iRK[7]=iRK[3]+(iRK[6])
-            iRK[8]=h*((z)*math.log(iRK[7]+w))
-            iRK[9]=iRK[1]+ 1/6*(iRK[2]+2*iRK[4]+2*iRK[6]+iRK[8])
+            iRK[0] = tant + h
+            iRK[1] = cant
+            iRK[2] = h * ((z) * math.log(iRK[1] + w))
+            iRK[3] = iRK[1] + (iRK[2] / 2)
+            iRK[4] = h * ((z) * math.log(iRK[3] + w))
+            iRK[5] = iRK[3] + (iRK[4] / 2)
+            iRK[6] = h * ((z) * math.log(iRK[5] + w))
+            iRK[7] = iRK[5] + (iRK[6])
+            iRK[8] = h * ((z) * math.log(iRK[7] + w))
+            iRK[9] = iRK[1] + 1 / 6 * (iRK[2] + 2 * iRK[4] + 2 * iRK[6] + iRK[8])
             rk_guardado.append(iRK[:])
-            tant=iRK[0]
-            cant=iRK[9]
-    return (rk_guardado)    
-    
-
-
+            tant = iRK[0]
+            cant = iRK[9]
+        if iRK[9] >= b:
+            break
+    return rk_guardado
